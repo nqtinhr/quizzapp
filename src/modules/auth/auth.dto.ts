@@ -1,5 +1,6 @@
 import { Exclude } from "class-transformer";
 import { IsEmail, IsString, Length } from "class-validator";
+import { Match } from "src/shared/decorators/custom-validator.decorator";
 
 export class LoginBodyDto {
     @IsEmail()
@@ -13,6 +14,7 @@ export class RegisterBodyDto extends LoginBodyDto {
     @IsString()
     name: string;
     @IsString()
+    @Match('password', { message: 'Passwords must match' })
     comfirmPassword: string;
 }
 
