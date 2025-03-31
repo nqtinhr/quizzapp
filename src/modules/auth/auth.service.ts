@@ -1,10 +1,9 @@
 import { ConflictException, Injectable, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common'
+import { isNotFoundError, isUniqueConstraintPrismaError } from 'src/shared/helper'
 import { HashingService } from 'src/shared/services/hashing.service'
 import { PrismaService } from 'src/shared/services/prisma.service'
-import { LoginBodyDto, RegisterBodyDto } from './auth.dto'
-import { Prisma } from '@prisma/client'
 import { TokenService } from 'src/shared/services/token.service'
-import { isNotFoundError, isUniqueConstraintPrismaError } from 'src/shared/helper'
+import { LoginBodyDto, RegisterBodyDto } from './auth.dto'
 
 @Injectable()
 export class AuthService {
@@ -83,7 +82,25 @@ export class AuthService {
     }
   }
 
-  async generateTokens(payload: { userId: string }) {
+  async logout(refreshToken: string) {
+    try {
+      await this.tokenService.verifyRefreshToken(refreshToken)
+      await this.prismaService.refreshToken.delete({
+        where: {
+          token: refreshToken
+        }
+      })
+      return { message: "Logout successfully" }
+    } catch (error) {
+      // Trường hợp đã refesh token rồi, hãy thông báo cho user biết refresh token đã bị đánh cắp
+      if(isNotFoundError(error)) {
+        throw new UnauthorizedException('Refresh token has been revoked')
+      }
+      throw new UnauthorizedException();
+    }
+  }
+  
+  private async generateTokens(payload: { userId: string }) {
     const [accessToken, refreshToken] = await Promise.all([
       this.tokenService.signAccessToken(payload),
       this.tokenService.signRefreshToken(payload)

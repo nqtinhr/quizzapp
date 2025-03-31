@@ -1,29 +1,51 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
-import { AUTH_TYPE_KEY } from '../decorators/auth.decorator'
+import { AuthType, ConditionGuard } from '../constants/auth.constant'
+import { AUTH_TYPE_KEY, AuthTypeDecoratorPayload } from '../decorators/auth.decorator'
 import { AccessTokenGuard } from './access-token.guard'
 import { APIKeyGuard } from './api-key.guard'
-import { AuthType } from '../constants/auth.constant'
 
 @Injectable()
-export class AuthGuard implements CanActivate {
-  private readonly authTypeGuardMap: Record<string, CanActivate> = {
-    [AuthType.Bearer]: this.accessTokenGuard,
-    [AuthType.APIKey]: this.apiKeyGuard,
-    [AuthType.None]: { canActivate: () => true }
-  }
+export class AuthenticationGuard implements CanActivate {
+  private readonly authTypeGuardMap: Record<string, CanActivate>
+
   constructor(
     private readonly reflector: Reflector,
     private readonly accessTokenGuard: AccessTokenGuard,
     private readonly apiKeyGuard: APIKeyGuard
-  ) {}
+  ) {
+    this.authTypeGuardMap = {
+      [AuthType.Bearer]: this.accessTokenGuard,
+      [AuthType.APIKey]: this.apiKeyGuard,
+      [AuthType.None]: { canActivate: () => true }
+    }
+  }
 
-  canActivate(context: ExecutionContext): Promise<boolean> {
-    const isPublic = this.reflector.getAllAndOverride<boolean>(AUTH_TYPE_KEY, [
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const authTypeValues = this.reflector.getAllAndOverride<AuthTypeDecoratorPayload | undefined>(AUTH_TYPE_KEY, [
       context.getHandler(),
       context.getClass()
-    ])
-
-    return true
+    ]) ?? { authTypes: [AuthType.None], options: { condition: ConditionGuard.And } }
+    const guards = authTypeValues.authTypes.map(authType => this.authTypeGuardMap[authType])
+    let error = new UnauthorizedException()
+    if(authTypeValues.options.condition === ConditionGuard.Or) {
+      for (const instance of guards) {
+        const canActivate = await Promise.resolve(instance.canActivate(context)).catch(err => {
+          error = err
+          return false
+        })
+        if (canActivate) return true
+      }
+      throw error
+    } else {
+      for (const instance of guards) {
+        const canActivate = await Promise.resolve(instance.canActivate(context)).catch(err => {
+          error = err
+          return false
+        })
+        if (!canActivate) return false
+      }
+      return true
+    }
   }
 }
