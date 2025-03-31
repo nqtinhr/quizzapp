@@ -7,6 +7,11 @@ generator client {
   provider = "prisma-client-js"
 }
 
+enum UserRole {
+  ADMIN
+  USER
+}
+
 model Quiz {
   id          String         @id @default(uuid())
   title       String
@@ -42,6 +47,7 @@ model User {
   email     String         @unique
   name      String
   password  String
+  role      UserRole       @default(USER) 
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
   plays     QuizPlay[]
