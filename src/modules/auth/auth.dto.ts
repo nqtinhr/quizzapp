@@ -28,6 +28,7 @@ export class RegisterBodyDto extends LoginBodyDto {
 }
 
 export class RefreshTokenDto {
+  @IsString()
   refreshToken: string
 }
 

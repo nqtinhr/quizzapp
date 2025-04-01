@@ -7,12 +7,13 @@ import { AuthenticationGuard } from './guards/authentication.guard';
 import { HashingService } from './services/hashing.service';
 import { PrismaService } from './services/prisma.service';
 import { TokenService } from './services/token.service';
+import { RolesGuard } from './guards/roles.guard';
 
 const shareServices = [PrismaService, HashingService, TokenService];
 
 @Global()
 @Module({
-    providers: [...shareServices, AccessTokenGuard, APIKeyGuard, {
+    providers: [...shareServices, RolesGuard, AccessTokenGuard, APIKeyGuard, {
         provide: APP_GUARD,
         useClass: AuthenticationGuard
     }],

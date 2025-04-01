@@ -1,4 +1,7 @@
 import { IsString, IsOptional, IsArray, IsInt, IsUUID } from 'class-validator';
+import { QuizModel } from 'src/shared/models/quiz.model';
+
+export class GetQuizItemDto extends QuizModel {}
 
 export class CreateQuizDto {
   @IsString()
@@ -16,10 +19,13 @@ export class CreateQuizDto {
   thumbnail?: string;
 
   @IsArray()
-  questions: CreateQuizQuestionDto[];
+  questions: QuizQuestionDto[];
+
+  @IsArray()
+  plays?: QuizPlayDto[];
 }
 
-export class CreateQuizQuestionDto {
+export class QuizQuestionDto {
   @IsString()
   question: string;
 
@@ -28,6 +34,14 @@ export class CreateQuizQuestionDto {
 
   @IsInt()
   answerIndex: number;
+}
+
+export class QuizPlayDto {
+  @IsString()
+  userId: string;
+
+  @IsString()
+  quizId: string;
 }
 
 export class UpdateQuizDto {

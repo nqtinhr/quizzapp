@@ -70,9 +70,7 @@ export class AuthService {
           token: refreshToken
         }
       })
-      // Tạo access token và refresh token mới
-      const tokens = await this.generateTokens({ userId })
-      return tokens
+      return this.generateTokens({ userId })
     } catch (error) {
       // Trường hợp đã refesh token rồi, hãy thông báo cho user biết refresh token đã bị đánh cắp
       if(isNotFoundError(error)) {
