@@ -1,0 +1,41 @@
+.navbar {
+    background-color: var(--primary-color);
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    transition: box-shadow .3s ease-in-out;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: var(--navbar-height);
+    width: 100%;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 4rem;
+}
+
+.navbar::before {
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 50%;
+    height: 100%;
+    width: 100vw;
+    transform: translateX(-50%);
+    background-color: var(--primary-color);
+    overflow: hidden;
+    z-index: -1;
+}
+
+.logo {
+    display: flex;
+    height: 4.5rem;
+}
+
+.right {
+    display: flex;
+    align-items: center;
+    column-gap: 3rem;
+}
+
+
