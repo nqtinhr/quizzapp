@@ -1,0 +1,13 @@
+.ReactTags__remove {
+    background-color: transparent !important;
+}
+
+.ReactTags__remove svg {
+    fill: #444;
+    margin-left: 1rem;
+    transition: .2s fill ease;
+}
+
+.ReactTags__remove svg:hover {
+    fill: var(--red-color);
+}

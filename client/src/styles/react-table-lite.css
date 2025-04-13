@@ -1,0 +1,60 @@
+.react-table-lite-search-form {
+    width: 100%;
+    position: relative;
+}
+
+.react-table-lite-search-form input {
+    width: 100%;
+    font-size: 1.8rem;
+    border: none;
+    outline: none;
+    border-radius: 0.5rem;
+    padding: 2rem 1rem;
+    border: 0.1rem solid #EEE;
+}
+
+.react-table-lite-search-form button {
+    position: absolute;
+    top: 1.3rem;
+    right: 1.3rem;
+    font-size: 1.6rem;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: var(--primary-color);
+}
+
+.react-table-lite-table {
+    font-size: 1.5rem;
+    font-family: var(--font-family);
+    background-color: var(--white-color);
+    padding: 1rem;
+    border-radius: 0.3rem;
+    overflow: hidden;
+}
+
+.react-table-lite-table .react-table-lite-header {
+    background-color: #F1F1F1;
+    border: none;
+    padding: 1rem;
+    font-weight: 500;
+    font-size: 1.6rem;
+}
+
+.react-table-lite-table .react-table-lite-cell {
+    border-bottom: 0.1rem solid #F3F3F3;
+    padding: 0.5rem 1rem;
+}
+
+.react-table-lite-table td,
+.react-table-lite-table th {
+    white-space: nowrap;
+}
+
+.react-table-lite-action-btn-container {
+    display: flex;
+}
+
+.react-table-lite-action-btn-container a {
+    display: flex;
+}

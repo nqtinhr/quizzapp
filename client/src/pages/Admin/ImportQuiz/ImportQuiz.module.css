@@ -1,0 +1,18 @@
+.form {
+    background-color: var(--white-color);
+    padding: 4rem;
+    padding-bottom: 14rem;
+    border-radius: 0.5rem;
+}
+
+.submit {
+    float: right;
+    margin: 5rem 0 2.5rem;
+}
+
+@media screen and (min-width: 768px) {
+    .form {
+        padding: 8rem;
+        padding-bottom: 16rem;
+    }
+}

@@ -1,14 +1,14 @@
-import styles from './QuizQuestionInput.module.css'
+import { DELETE, QUIZ_OPTIONS, QUIZ_QUESTION } from '@/constants/common'
+import { QuizQuestion } from '@/models/QuizQuestion'
+import { QuizQuestionErrors } from '@/models/QuizValidator'
 import { ChangeEvent } from 'react'
 import { LiaTimesSolid } from 'react-icons/lia'
-import { QuizQuestion } from '../../models/QuizQuestion'
 import { Tooltip } from 'react-tooltip'
-import QuizOptionInput from '../QuizOptionInput/QuizOptionInput'
 import Input from '../Input/Input'
-import Label from '../Label/Label'
 import InputError from '../InputError/InputError'
-import { QuizQuestionErrors } from '@/models/QuizValidator'
-import { DELETE, QUIZ_OPTIONS, QUIZ_QUESTION } from '@/constants/common'
+import Label from '../Label/Label'
+import QuizOptionInput from '../QuizOptionInput/QuizOptionInput'
+import styles from './QuizQuestionInput.module.css'
 
 type QuizQuestionInputProps = {
   value: QuizQuestion
