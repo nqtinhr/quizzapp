@@ -1,22 +1,23 @@
+import { loginUserAPI } from '@/redux/authSlice'
 import styles from './Login.module.css'
-import { FcGoogle } from 'react-icons/fc'
-import { RxGithubLogo } from 'react-icons/rx'
-import { CgProfile } from 'react-icons/cg'
-import { LOGIN_PAGE_TITLE, LOGIN_WITH_GITHUB, LOGIN_WITH_GOOGLE } from '@/constants/common'
+// import { FcGoogle } from 'react-icons/fc'
+// import { RxGithubLogo } from 'react-icons/rx'
+import { LOGIN_PAGE_TITLE } from '@/constants/common'
+import { useAppDispatch } from '@/redux/store'
 import { useState } from 'react'
+import { CgProfile } from 'react-icons/cg'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const login = (provider: string) => {
-    window.location.href = `/` // thay bằng logic auth thực tế
-  }
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // TODO: Gọi API đăng nhập với email và password
-    console.log('Logging in with:', { email, password })
+    dispatch(loginUserAPI({ email, password }))
   }
 
   return (
@@ -41,11 +42,11 @@ const Login = () => {
           className={styles.input}
           required
         />
-        <button type='submit' className={styles.submitButton}>
-          Đăng nhập
+        <button type='submit' className={`${styles.submitButton} interceptor-loading`}>
+          {LOGIN_PAGE_TITLE}
         </button>
       </form>
-      <div className={styles.signinOptions}>
+      {/* <div className={styles.signinOptions}>
         <button onClick={() => login('google')} className={styles.signinOption}>
           <FcGoogle className={styles.signinOptionIcon} />
           {LOGIN_WITH_GOOGLE}
@@ -54,7 +55,7 @@ const Login = () => {
           <RxGithubLogo className={styles.signinOptionIcon} />
           {LOGIN_WITH_GITHUB}
         </button>
-      </div>
+      </div> */}
     </div>
   )
 }

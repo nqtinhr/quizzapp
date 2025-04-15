@@ -1,7 +1,7 @@
 import PageTitle from '@/components/PageTitle/PageTitle'
 import { Quiz } from '@/models/Quiz'
 import { QuizPlay } from '@/models/QuizPlay'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import PlayQuizQuestions from './PlayQuizQuestions/PlayQuizQuestions'
 import PlayQuizResult from './PlayQuizResult/PlayQuizResult'

@@ -27,15 +27,11 @@ export class RegisterBodyDto extends LoginBodyDto {
   comfirmPassword: string
 }
 
-export class RefreshTokenDto {
-  @IsString()
-  refreshToken: string
-}
-
 export class RegisterResDto {
   id: string
   name: string
   email: string
+  picture: string
   @Exclude() password: string
   createdAt: Date
   updatedAt: Date
@@ -43,6 +39,11 @@ export class RegisterResDto {
   constructor(partial: Partial<RegisterResDto>) {
     Object.assign(this, partial)
   }
+}
+
+export class RefreshTokenDto {
+  @IsString()
+  refreshToken: string
 }
 
 export class RefreshTokenResDto extends LoginResDto {}

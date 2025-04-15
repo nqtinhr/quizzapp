@@ -24,11 +24,11 @@ const ManageUsers = () => {
         customRenderCell={{
           name: (user: User) => (
             <span className={styles.name}>
-              <img src={user.image} alt='User' />
+              <img src={user.picture} alt='User' />
               {user.name}
             </span>
           ),
-          provider: (user: User) => <img className={styles.provider} src={user.image} alt='Provider' />
+          provider: (user: User) => <img className={styles.provider} src={user.picture} alt='Provider' />
         }}
       />
     </>

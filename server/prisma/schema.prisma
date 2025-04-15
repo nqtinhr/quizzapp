@@ -47,6 +47,7 @@ model User {
   email     String         @unique
   name      String
   password  String
+  picture   String         @default("https://res.cloudinary.com/tinhaws/image/upload/v1744683355/avatars/pink.jpg")
   role      UserRole       @default(USER) 
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt

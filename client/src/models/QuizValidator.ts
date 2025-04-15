@@ -28,11 +28,7 @@ export class QuizErrors {
   questions: QuizQuestionErrors[] = [new QuizQuestionErrors()]
 
   isNotEmpty = () =>
-    this.title ||
-    this.description ||
-    this.tags ||
-    this.thumbnail ||
-    this.questions.filter((q) => q.isNotEmpty()).length > 0
+    this.title || this.description || this.tags || this.thumbnail || this.questions.filter((q) => q.isNotEmpty()).length > 0
 }
 
 export class QuizQuestionErrors {

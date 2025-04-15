@@ -6,15 +6,7 @@ import Input from '../Input/Input'
 import QuizTagsInput from '../QuizTagsInput/QuizTagsInput'
 import QuizQuestionInput from '../QuizQuestionInput/QuizQuestionInput'
 import Label from '../Label/Label'
-import {
-  ADD,
-  MANDATORY,
-  QUIZ_DESCRIPTION,
-  QUIZ_QUESTIONS,
-  QUIZ_TAGS,
-  QUIZ_THUMBNAIL_URL,
-  QUIZ_TITLE
-} from '@/constants/common'
+import { ADD, MANDATORY, QUIZ_DESCRIPTION, QUIZ_QUESTIONS, QUIZ_TAGS, QUIZ_THUMBNAIL_URL, QUIZ_TITLE } from '@/constants/common'
 import SubmitButton from '../Button/SubmitButton'
 import { Quiz } from '@/models/Quiz'
 import { QuizErrors, QuizQuestionErrors, validate } from '@/models/QuizValidator'

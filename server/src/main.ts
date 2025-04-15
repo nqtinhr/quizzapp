@@ -6,6 +6,10 @@ import { TransformInterceptor } from './shared/interceptor/transform.interceptor
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
+  app.enableCors({
+    origin: true,
+    credentials: true
+  })
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true, // Tự động loại bỏ các field không được khai báo decorator trong DTO
@@ -26,6 +30,6 @@ async function bootstrap() {
   )
   app.useGlobalInterceptors(new LoggingInterceptor());
   app.useGlobalInterceptors(new TransformInterceptor());
-  await app.listen(process.env.PORT ?? 8000)
+  await app.listen(process.env.PORT ?? 3000)
 }
 bootstrap()

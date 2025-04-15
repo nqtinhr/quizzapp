@@ -1,7 +1,5 @@
 export class User {
   name = ''
   email = ''
-  image = ''
+  picture = ''
 }
-
-export const NOT_LOGGED_IN_USER = new User()
