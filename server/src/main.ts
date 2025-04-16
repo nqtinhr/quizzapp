@@ -10,6 +10,11 @@ async function bootstrap() {
     origin: true,
     credentials: true
   })
+  // Fix cái vụ Cache from disk 
+  // app.use((req, res, next) => {
+  //   res.set('Cache-Control', 'no-store')
+  //   next()
+  // })
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true, // Tự động loại bỏ các field không được khai báo decorator trong DTO
@@ -28,8 +33,8 @@ async function bootstrap() {
       }
     })
   )
-  app.useGlobalInterceptors(new LoggingInterceptor());
-  app.useGlobalInterceptors(new TransformInterceptor());
+  app.useGlobalInterceptors(new LoggingInterceptor())
+  app.useGlobalInterceptors(new TransformInterceptor())
   await app.listen(process.env.PORT ?? 3000)
 }
 bootstrap()

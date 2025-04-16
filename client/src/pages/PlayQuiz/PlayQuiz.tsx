@@ -1,10 +1,10 @@
 import PageTitle from '@/components/PageTitle/PageTitle'
+import PlayQuizQuestions from '@/components/PlayQuizQuestions/PlayQuizQuestions'
+import PlayQuizResult from '@/components/PlayQuizResult/PlayQuizResult'
 import { Quiz } from '@/models/Quiz'
 import { QuizPlay } from '@/models/QuizPlay'
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
-import PlayQuizQuestions from './PlayQuizQuestions/PlayQuizQuestions'
-import PlayQuizResult from './PlayQuizResult/PlayQuizResult'
 
 const PlayQuiz = () => {
   const { id } = useParams()

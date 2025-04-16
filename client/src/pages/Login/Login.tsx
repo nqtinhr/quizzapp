@@ -7,6 +7,7 @@ import { useAppDispatch } from '@/redux/store'
 import { useState } from 'react'
 import { CgProfile } from 'react-icons/cg'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const Login = () => {
   const [email, setEmail] = useState('')
@@ -17,7 +18,14 @@ const Login = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    dispatch(loginUserAPI({ email, password }))
+
+    toast
+      .promise(dispatch(loginUserAPI({ email, password })), {
+        pending: 'Logging in...'
+      })
+      .then((res: any) => {
+        if (!res.error) navigate('/')
+      })
   }
 
   return (

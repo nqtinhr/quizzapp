@@ -1,6 +1,6 @@
 import authApi from '@/api/authApi'
 import { ILogin, IRefreshToken } from '@/types/IAuth'
-import { createAsyncThunk, PayloadAction, ActionReducerMapBuilder } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, PayloadAction, ActionReducerMapBuilder } from '@reduxjs/toolkit'
 import { AxiosResponse } from 'axios'
 
 export interface AuthState {
@@ -37,7 +37,7 @@ export const logoutUserAPI = createAsyncThunk<AxiosResponse<void>, IRefreshToken
   }
 )
 
-export const authSlice = {
+export const authSlice = createSlice({
   name: 'auth',
   initialState,
   // Reducers: Nơi xử lý dữ liệu đồng bộ
@@ -47,7 +47,6 @@ export const authSlice = {
     builder
       .addCase(loginUserAPI.fulfilled, (state, action: PayloadAction<AxiosResponse<AuthState>>) => {
         const { accessToken, refreshToken } = action.payload.data
-        console.log('🚀 ~ builder.addCase ~ action.payload.data:', action.payload.data)
         state.accessToken = accessToken
         state.refreshToken = refreshToken
       })
@@ -63,7 +62,7 @@ export const authSlice = {
         state.refreshToken = ''
       })
   }
-}
+})
 
 // Actions: Là nơi dành cho các components bên dưới gọi bằng dispatch() tới nó để cập nhật lại dữ liệu thông qua reducer (chạy đồng bộ)
 // Để ý ở trên thì không thấy properties actions đâu cả, bởi vì những cái actions này đơn giản là được
@@ -72,5 +71,4 @@ export const authSlice = {
 // Selectors: Là nơi dành cho các components bên dưới gọi bằng hook useSelector() để lấy dữ liệu từ trong
 // kho redux store ra sử dụng
 
-// Cái file này tên là activeBoardSlice NHƯNG chúng ta sẽ export một thứ tên là Reducer, mọi người lưu ý ;D
 export const authReducer = authSlice.reducer

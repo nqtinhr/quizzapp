@@ -1,4 +1,4 @@
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common'
+import { CanActivate, ExecutionContext, HttpException, Injectable, UnauthorizedException } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 import { AuthType, ConditionGuard } from '../constants/auth.constant'
 import { AUTH_TYPE_KEY, AuthTypeDecoratorPayload } from '../decorators/auth.decorator'
@@ -36,7 +36,8 @@ export class AuthenticationGuard implements CanActivate {
         })
         if (canActivate) return true
       }
-      throw error
+      if (error instanceof HttpException) throw error
+      throw new UnauthorizedException()
     } else {
       for (const instance of guards) {
         const canActivate = await Promise.resolve(instance.canActivate(context)).catch(err => {

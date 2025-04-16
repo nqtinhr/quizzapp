@@ -1,4 +1,11 @@
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common'
+import {
+  CanActivate,
+  ExecutionContext,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException
+} from '@nestjs/common'
 import { REQUEST_USER_KEY } from '../constants/auth.constant'
 import { TokenService } from '../services/token.service'
 
@@ -14,8 +21,14 @@ export class AccessTokenGuard implements CanActivate {
       const decodedAccessToken = await this.tokenService.verifyAccessToken(accessToken)
       request[REQUEST_USER_KEY] = decodedAccessToken
       return true
-    } catch {
+    } catch (error) {
+      // Trường hợp token hết hạn => trả về 410 GONE
+      if (error?.message?.includes('jwt expired')) {
+        throw new HttpException('Need to refresh token.', HttpStatus.GONE)
+      } else {
+        console.log('401')
         throw new UnauthorizedException()
+      }
     }
   }
 }
