@@ -26,7 +26,6 @@ const ProtectedRoute = ({ user }: { user: IUser | null }) => {
 function App() {
   const dispatch = useAppDispatch()
   const currentUser = useAppSelector((state) => state.user.currentUser)
-  console.log("🚀 ~ App ~ currentUser:", currentUser)
   const accessToken = useAppSelector((state) => state.auth.accessToken)
 
   useEffect(() => {

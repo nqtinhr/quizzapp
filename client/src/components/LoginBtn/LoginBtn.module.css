@@ -1,0 +1,31 @@
+.button {
+    text-decoration: none;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1.5rem;
+    background-color: var(--yellow-color);
+    color: white;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: transform .25s ease;
+    margin-top: 4rem;
+    padding: 1.2rem 10rem;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.button:hover {
+    transform: scale(1.05);
+}
+
+.icon {
+    font-size: 3.5rem;
+    color: var(--white-color);
+    cursor: pointer;
+    transition: color .2s ease-in;
+}
+
+.icon:hover {
+    color: var(--yellow-color);
+}

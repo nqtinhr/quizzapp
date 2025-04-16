@@ -38,7 +38,7 @@ export default tseslint.config(
           endOfLine: 'auto',
           useTabs: false,
           singleQuote: true,
-          printWidth: 130,
+          printWidth: 120,
           jsxSingleQuote: true
         }
       ]

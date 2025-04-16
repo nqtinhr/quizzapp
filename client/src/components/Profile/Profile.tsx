@@ -14,7 +14,7 @@ const Profile = () => {
   const [user, setUser] = useState({
     name: 'John Doe',
     email: 'john.doe@example.com',
-    image: 'https://avatars.githubusercontent.com/u/32478517?v=4'
+    picture: 'https://avatars.githubusercontent.com/u/32478517?v=4'
   })
   const navigate = useNavigate()
 
@@ -37,13 +37,13 @@ const Profile = () => {
   return (
     <div className={styles.container}>
       <div onClick={toggleDropdown} className={styles.profile}>
-        <img className={styles.avatar} src={user.image} alt='Avatar' />
+        <img className={styles.avatar} src={user.picture} alt='Avatar' />
         <span className={styles.email}>{user.email}</span>
         <MdOutlineKeyboardArrowDown className={styles.dropdownIcon} />
       </div>
       <div className={[styles.dropdown, showDropdown ? styles.show : ''].join(' ')}>
         <p className={styles.username}>
-          <img className={styles.avatar} src={user.image} alt='Avatar' />
+          <img className={styles.avatar} src={user.picture} alt='Avatar' />
           {user.name}
           <AdminLabel />
         </p>
