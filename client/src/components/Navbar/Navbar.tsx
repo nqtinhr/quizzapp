@@ -3,9 +3,10 @@ import styles from './Navbar.module.css'
 import { useAppSelector } from '@/redux/store'
 import Profile from '../Profile/Profile'
 import LoginBtn from '../LoginBtn/LoginBtn'
+import { selectCurrentUser } from '@/redux/userSlice'
 
 const Navbar = () => {
-  const currentUser = useAppSelector((state) => state.user.currentUser)
+  const currentUser = useAppSelector(selectCurrentUser)
 
   return (
     <nav className={styles.navbar}>

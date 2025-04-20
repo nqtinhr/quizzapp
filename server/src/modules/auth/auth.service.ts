@@ -1,4 +1,11 @@
-import { ConflictException, Injectable, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common'
+import {
+  ConflictException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+  UnprocessableEntityException
+} from '@nestjs/common'
 import { isNotFoundError, isUniqueConstraintPrismaError } from 'src/shared/helper'
 import { HashingService } from 'src/shared/services/hashing.service'
 import { PrismaService } from 'src/shared/services/prisma.service'
@@ -28,7 +35,7 @@ export class AuthService {
       if (isUniqueConstraintPrismaError(error)) {
         throw new ConflictException('Email already exists')
       }
-      throw new UnauthorizedException();
+      throw new UnauthorizedException()
     }
   }
 
@@ -73,31 +80,30 @@ export class AuthService {
       return this.generateTokens({ userId })
     } catch (error) {
       // Trường hợp đã refesh token rồi, hãy thông báo cho user biết refresh token đã bị đánh cắp
-      if(isNotFoundError(error)) {
-        throw new UnauthorizedException('Refresh token has been revoked')
+      if (isNotFoundError(error)) {
+        throw new HttpException('Refresh token has been revoked', HttpStatus.FORBIDDEN)
       }
-      throw new UnauthorizedException();
+      // Token không hợp lệ hoặc lỗi khác
+      throw new HttpException('Invalid refresh token', 498)
     }
   }
-
+  
   async logout(refreshToken: string) {
     try {
-      await this.tokenService.verifyRefreshToken(refreshToken)
+      // await this.tokenService.verifyRefreshToken(refreshToken)
       await this.prismaService.refreshToken.delete({
         where: {
           token: refreshToken
         }
       })
-      return { message: "Logout successfully" }
     } catch (error) {
-      // Trường hợp đã refesh token rồi, hãy thông báo cho user biết refresh token đã bị đánh cắp
-      if(isNotFoundError(error)) {
-        throw new UnauthorizedException('Refresh token has been revoked')
+      if (!isNotFoundError(error)) {
+        throw new UnauthorizedException()
       }
-      throw new UnauthorizedException();
     }
+    return { message: 'Logout successfully' }
   }
-  
+
   private async generateTokens(payload: { userId: string }) {
     const [accessToken, refreshToken] = await Promise.all([
       this.tokenService.signAccessToken(payload),

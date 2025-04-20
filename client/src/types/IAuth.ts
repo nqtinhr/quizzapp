@@ -13,3 +13,8 @@ export interface IRegister {
 export interface IRefreshToken {
   refreshToken: string
 }
+
+export interface ITokenPayload {
+  accessToken: string
+  refreshToken: string
+}

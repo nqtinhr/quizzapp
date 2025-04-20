@@ -1,4 +1,11 @@
-import { CanActivate, ExecutionContext, HttpException, Injectable, UnauthorizedException } from '@nestjs/common'
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+  HttpException,
+  HttpStatus
+} from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 import { AuthType, ConditionGuard } from '../constants/auth.constant'
 import { AUTH_TYPE_KEY, AuthTypeDecoratorPayload } from '../decorators/auth.decorator'
@@ -26,25 +33,39 @@ export class AuthenticationGuard implements CanActivate {
       context.getHandler(),
       context.getClass()
     ]) ?? { authTypes: [AuthType.None], options: { condition: ConditionGuard.And } }
-    const guards = authTypeValues.authTypes.map(authType => this.authTypeGuardMap[authType])
-    let error = new UnauthorizedException()
-    if(authTypeValues.options.condition === ConditionGuard.Or) {
+    const guards = authTypeValues.authTypes.map((authType) => this.authTypeGuardMap[authType])
+
+    if (authTypeValues.options.condition === ConditionGuard.Or) {
       for (const instance of guards) {
-        const canActivate = await Promise.resolve(instance.canActivate(context)).catch(err => {
-          error = err
-          return false
-        })
-        if (canActivate) return true
+        try {
+          const canActivate = await instance.canActivate(context)
+          if (canActivate) return true
+        } catch (err) {
+          const response = context.switchToHttp().getResponse()
+
+          // Nếu lỗi là 410 => set header để tránh cache
+          if (err instanceof HttpException) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
+            if (err.getStatus() === HttpStatus.GONE) {
+              response.setHeader('Cache-Control', 'no-store')
+              throw err
+            }
+          }
+        }
       }
-      if (error instanceof HttpException) throw error
       throw new UnauthorizedException()
     } else {
       for (const instance of guards) {
-        const canActivate = await Promise.resolve(instance.canActivate(context)).catch(err => {
-          error = err
-          return false
-        })
-        if (!canActivate) return false
+        try {
+          const canActivate = await instance.canActivate(context)
+          if (!canActivate) return false
+        } catch (err) {
+          if (err instanceof HttpException) {
+            throw err
+          } else {
+            throw new UnauthorizedException()
+          }
+        }
       }
       return true
     }

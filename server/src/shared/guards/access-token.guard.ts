@@ -24,6 +24,7 @@ export class AccessTokenGuard implements CanActivate {
     } catch (error) {
       // Trường hợp token hết hạn => trả về 410 GONE
       if (error?.message?.includes('jwt expired')) {
+        console.log('>>>>> throwing 410')
         throw new HttpException('Need to refresh token.', HttpStatus.GONE)
       } else {
         console.log('401')

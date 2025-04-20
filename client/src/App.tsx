@@ -14,8 +14,9 @@ import NoPage from './pages/NoPage/NoPage'
 import PlayQuiz from './pages/PlayQuiz/PlayQuiz'
 import { IUser } from './types/IUser'
 import { useAppDispatch, useAppSelector } from './redux/store'
-import { useEffect } from 'react'
-import { profileAPI } from './redux/userSlice'
+import { useEffect, useRef } from 'react'
+import { profileAPI, selectCurrentUser } from './redux/userSlice'
+import { selectAccessToken } from './redux/authSlice'
 
 const ProtectedRoute = ({ user }: { user: IUser | null }) => {
   if (!user) {
@@ -25,14 +26,16 @@ const ProtectedRoute = ({ user }: { user: IUser | null }) => {
 }
 function App() {
   const dispatch = useAppDispatch()
-  const currentUser = useAppSelector((state) => state.user.currentUser)
-  const accessToken = useAppSelector((state) => state.auth.accessToken)
+  const currentUser = useAppSelector(selectCurrentUser)
+  const accessToken = useAppSelector(selectAccessToken)
+  const calledProfileRef = useRef(false)
 
   useEffect(() => {
-    if (accessToken) {
+    if (accessToken && !currentUser && !calledProfileRef.current) {
       dispatch(profileAPI())
+      calledProfileRef.current = true
     }
-  }, [accessToken, dispatch])
+  }, [accessToken, currentUser, dispatch])
 
   return (
     <BrowserRouter>

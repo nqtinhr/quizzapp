@@ -14,6 +14,13 @@ export const GO_TO_HOMEPAGE = 'Go to Homepage'
 export const NEXT_QUESTION = 'Next Question'
 export const VIEW_QUIZ_RESULT = 'View Result'
 
+export const LOGOUT = 'Logout'
+export const USERS = 'Users'
+export const QUIZZES = 'Quizzes'
+export const HISTORY = 'History'
+
+export const USER = 'User'
+
 export const LOGIN_MESSAGE = 'Log in'
 export const LOGOUT_MODAL_HEADER = 'Logout'
 export const LOGOUT_MODAL_MESSAGE = 'Are you sure you want to log out?'
@@ -70,5 +77,4 @@ export const LOGGED_IN_RESERVED_PAGE = 'You must log in to access this page'
 export const ALL_RIGHTS_RESERVED = '© 2024 Quizz App. All rights reserved'
 export const NO_DATA_FOUND = 'No data found'
 
-export const USER = 'user'
 export const URL_BEFORE_LOGIN = 'url-before-login'

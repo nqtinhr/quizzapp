@@ -5,28 +5,43 @@ import { Link, useNavigate } from 'react-router-dom'
 import ConfirmModal from '../ConfirmModal/ConfirmModal'
 import AdminLabel from '../Label/AdminLabel'
 import styles from './Profile.module.css'
-import { LOGOUT_MODAL_BUTTON_LABEL, LOGOUT_MODAL_HEADER, LOGOUT_MODAL_MESSAGE } from '@/constants/common'
+import {
+  HISTORY,
+  LOGOUT,
+  LOGOUT_MODAL_BUTTON_LABEL,
+  LOGOUT_MODAL_HEADER,
+  LOGOUT_MODAL_MESSAGE,
+  QUIZ,
+  USERS
+} from '@/constants/common'
+import { useAppDispatch, useAppSelector } from '@/redux/store'
+import { clearUser, selectCurrentUser } from '@/redux/userSlice'
+import { logoutUserAPI, selectRefreshToken } from '@/redux/authSlice'
+import { toast } from 'react-toastify'
 
 const Profile = () => {
   const [openLogoutModal, setOpenLogoutModal] = useState(false)
   const [showDropdown, setShowDropdown] = useState(false)
-  // const { user, setUser } = useUser()
-  const [user, setUser] = useState({
-    name: 'John Doe',
-    email: 'john.doe@example.com',
-    picture: 'https://avatars.githubusercontent.com/u/32478517?v=4'
-  })
+
   const navigate = useNavigate()
+
+  const dispatch = useAppDispatch()
+  const user = useAppSelector(selectCurrentUser)
+  const refreshToken = useAppSelector(selectRefreshToken)
 
   useEffect(() => {
     document.addEventListener('click', () => setShowDropdown(false))
   }, [])
 
   const logout = () => {
-    // setUser(NOT_LOGGED_IN_USER)
-    // UserService.saveUser(NOT_LOGGED_IN_USER)
-    // ToastService.success(LOGOUT_WITH_SUCCESS)
-    navigate('/')
+    dispatch(logoutUserAPI({ refreshToken }))
+      .unwrap()
+      .then(() => {
+        dispatch(clearUser())
+        toast.success('Logout successfully')
+        setOpenLogoutModal(false)
+        navigate('/login')
+      })
   }
 
   const toggleDropdown = (event: React.MouseEvent<HTMLElement>) => {
@@ -37,35 +52,35 @@ const Profile = () => {
   return (
     <div className={styles.container}>
       <div onClick={toggleDropdown} className={styles.profile}>
-        <img className={styles.avatar} src={user.picture} alt='Avatar' />
-        <span className={styles.email}>{user.email}</span>
+        <img className={styles.avatar} src={user?.picture} alt='Avatar' />
+        <span className={styles.email}>{user?.email}</span>
         <MdOutlineKeyboardArrowDown className={styles.dropdownIcon} />
       </div>
       <div className={[styles.dropdown, showDropdown ? styles.show : ''].join(' ')}>
         <p className={styles.username}>
-          <img className={styles.avatar} src={user.picture} alt='Avatar' />
-          {user.name}
+          <img className={styles.avatar} src={user?.picture} alt='Avatar' />
+          {user?.name}
           <AdminLabel />
         </p>
         {user && (
           <>
             <Link className={styles.menuItem} to='/admin/quiz'>
               <LuSettings className={styles.icon} />
-              Quiz
+              {QUIZ}
             </Link>
             <Link className={styles.menuItem} to='/admin/users'>
               <LuUsers className={styles.icon} />
-              Utilisateurs
+              {USERS}
             </Link>
           </>
         )}
         <Link className={styles.menuItem} to='/history'>
           <LuHistory className={styles.icon} />
-          Historique
+          {HISTORY}
         </Link>
         <div className={styles.menuItem} onClick={() => setOpenLogoutModal(true)}>
           <LuLogOut className={styles.icon} />
-          Déconnexion
+          {LOGOUT}
         </div>
       </div>
       <ConfirmModal
