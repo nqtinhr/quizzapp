@@ -1,11 +1,10 @@
 import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom'
 import './App.css'
-import AddQuiz from './pages/Admin/AddQuiz/AddQuiz'
-import AdminPage from './pages/Admin/AdminPage'
-import ImportQuiz from './pages/Admin/ImportQuiz/ImportQuiz'
-import ManageQuizzes from './pages/Admin/ManageQuizzes/ManageQuizzes'
-import ManageUsers from './pages/Admin/ManageUsers/ManageUsers'
-import UpdateQuiz from './pages/Admin/UpdateQuiz/UpdateQuiz'
+import AddQuiz from './pages/Dashboard/AddQuiz/AddQuiz'
+import ImportQuiz from './pages/Dashboard/ImportQuiz/ImportQuiz'
+import ManageQuizzes from './pages/Dashboard/ManageQuizzes/ManageQuizzes'
+import ManageUsers from './pages/Dashboard/ManageUsers/ManageUsers'
+import UpdateQuiz from './pages/Dashboard/UpdateQuiz/UpdateQuiz'
 import History from './pages/History/History'
 import Home from './pages/Home/Home'
 import Layout from './pages/Layout'
@@ -17,6 +16,7 @@ import { useAppDispatch, useAppSelector } from './redux/store'
 import { useEffect, useRef } from 'react'
 import { profileAPI, selectCurrentUser } from './redux/userSlice'
 import { selectAccessToken } from './redux/authSlice'
+import Dashboard from './pages/Dashboard/Dashboard'
 
 const ProtectedRoute = ({ user }: { user: IUser | null }) => {
   if (!user) {
@@ -41,7 +41,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Layout />}>
-          <Route element={<AdminPage />}>
+          <Route element={<Dashboard />}>
             <Route path='/admin/quiz' element={<ManageQuizzes />} />
             <Route path='/admin/quiz/import' element={<ImportQuiz />} />
             <Route path='/admin/quiz/add' element={<AddQuiz />} />
