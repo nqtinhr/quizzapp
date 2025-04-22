@@ -1,38 +1,33 @@
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common'
+import { Reflector } from '@nestjs/core'
 import { UserRole } from '@prisma/client'
 import { ROLES_KEY } from '../decorators/roles.decorator'
-import { Reflector } from '@nestjs/core'
-import { PrismaService } from '../services/prisma.service'
+import { REQUEST_USER_KEY } from '../constants/auth.constant'
+import { TokenPayload } from '../types/jwt.type'
+
+/**
+ * Group Roles & Hierarchical RBAC
+ * Group Roles: Một user có thể có nhiều vai trò (roles),
+ * Hierarchical RBAC: Vai trò có thể kế thừa lại từ vai trò khác.
+ * CRUD (Create, Read, Update, Delete)
+ */
 
 @Injectable()
 export class RolesGuard implements CanActivate {
-  constructor(
-    private reflector: Reflector,
-    private readonly prismaService: PrismaService
-  ) {}
+  constructor(private reflector: Reflector) {}
 
-  async canActivate(context: ExecutionContext): Promise<boolean> {
+  canActivate(context: ExecutionContext): boolean {
     const requiredRoles = this.reflector.getAllAndOverride<UserRole[]>(ROLES_KEY, [
       context.getHandler(),
       context.getClass()
     ])
     if (!requiredRoles) return true
 
-    const { user } = context.switchToHttp().getRequest()
-    if (!user || !user.userId) {
+    const request = context.switchToHttp().getRequest()
+    const user: TokenPayload = request[REQUEST_USER_KEY]
+    if (!requiredRoles.includes(user?.role as UserRole)) {
       throw new ForbiddenException('You do not have permission to access this resource')
     }
-
-    // Fetch user role from database
-    const userRecord = await this.prismaService.user.findUnique({
-      where: { id: user.userId },
-      select: { role: true }
-    })
-
-    if (!userRecord || !requiredRoles.includes(userRecord.role)) {
-      throw new ForbiddenException('You do not have permission to access this resource')
-    }
-
     return true
   }
 }

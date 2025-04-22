@@ -57,14 +57,14 @@ export class AuthService {
         }
       ])
     }
-    const tokens = await this.generateTokens({ userId: user.id })
+    const tokens = await this.generateTokens({ userId: user.id, role: user.role })
     return tokens
   }
 
   async refreshToken(refreshToken: string) {
     try {
       // Kiểm tra refresh token có hợp lệ hay không
-      const { userId } = await this.tokenService.verifyRefreshToken(refreshToken)
+      const { userId, role } = await this.tokenService.verifyRefreshToken(refreshToken)
       // Kiểm tra refresh token có tồn tại trong database hay không
       await this.prismaService.refreshToken.findUniqueOrThrow({
         where: {
@@ -77,7 +77,7 @@ export class AuthService {
           token: refreshToken
         }
       })
-      return this.generateTokens({ userId })
+      return this.generateTokens({ userId, role })
     } catch (error) {
       // Trường hợp đã refesh token rồi, hãy thông báo cho user biết refresh token đã bị đánh cắp
       if (isNotFoundError(error)) {
@@ -87,7 +87,7 @@ export class AuthService {
       throw new HttpException('Invalid refresh token', 498)
     }
   }
-  
+
   async logout(refreshToken: string) {
     try {
       // await this.tokenService.verifyRefreshToken(refreshToken)
@@ -104,7 +104,7 @@ export class AuthService {
     return { message: 'Logout successfully' }
   }
 
-  private async generateTokens(payload: { userId: string }) {
+  private async generateTokens(payload: { userId: string; role: string }) {
     const [accessToken, refreshToken] = await Promise.all([
       this.tokenService.signAccessToken(payload),
       this.tokenService.signRefreshToken(payload)

@@ -9,6 +9,7 @@ generator client {
 
 enum UserRole {
   ADMIN
+  MODERATOR
   USER
 }
 
@@ -47,7 +48,7 @@ model User {
   email     String         @unique
   name      String
   password  String
-  picture   String         @default("https://res.cloudinary.com/tinhaws/image/upload/v1744683355/avatars/pink.jpg")
+  picture   String         @default("")
   role      UserRole       @default(USER) 
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt

@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Res } from '@nestjs/common'
+import { Body, Controller, HttpCode, Post, Res } from '@nestjs/common'
 import {
   LoginBodyDto,
   LoginResDto,
@@ -22,6 +22,7 @@ export class AuthController {
   }
 
   @Post('login')
+  @HttpCode(200)
   async login(@Body() body: LoginBodyDto, @Res({ passthrough: true }) res: Response) {
     const { accessToken, refreshToken } = await this.authService.login(body)
     /**
@@ -46,6 +47,7 @@ export class AuthController {
   }
 
   @Post('refresh-token')
+  @HttpCode(200)
   async refreshToken(@Body() body: RefreshTokenDto, @Res({ passthrough: true }) res: Response) {
     const { accessToken, refreshToken } = await this.authService.refreshToken(body.refreshToken)
 
@@ -67,6 +69,7 @@ export class AuthController {
   }
 
   @Post('logout')
+  @HttpCode(200)
   async logout(@Body() body: RefreshTokenDto, @Res({ passthrough: true }) res: Response) {
     res.clearCookie('accessToken')
     res.clearCookie('refreshToken')

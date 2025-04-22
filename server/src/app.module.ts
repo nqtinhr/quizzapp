@@ -4,8 +4,8 @@ import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { AuthModule } from './modules/auth/auth.module'
 import { QuizModule } from './modules/quiz/quiz.module'
+import { UserModule } from './modules/user/user.module'
 import { SharedModule } from './shared/shared.module'
-import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [SharedModule, AuthModule, QuizModule, UserModule],
@@ -15,7 +15,7 @@ import { UserModule } from './modules/user/user.module';
     {
       provide: APP_INTERCEPTOR,
       useClass: ClassSerializerInterceptor
-    }
+    },
   ]
 })
 export class AppModule {}
