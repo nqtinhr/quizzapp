@@ -2,7 +2,15 @@ import DeleteButton from '@/components/Button/DeleteButton'
 import ViewLink from '@/components/Link/ConsultLink'
 import EditLink from '@/components/Link/EditLink'
 import PageTitle from '@/components/PageTitle/PageTitle'
-import { ADD, EXPORT, IMPORT, MANAGE_QUIZZES_PAGE_TITLE, NO_DATA_FOUND, QUIZ_TAGS, QUIZ_TITLE } from '@/constants/common'
+import {
+  ADD,
+  EXPORT,
+  IMPORT,
+  MANAGE_QUIZZES_PAGE_TITLE,
+  NO_DATA_FOUND,
+  QUIZ_TAGS,
+  QUIZ_TITLE
+} from '@/constants/common'
 import { Quiz } from '@/models/Quiz'
 import { useState } from 'react'
 import { BiImport } from 'react-icons/bi'
@@ -40,7 +48,12 @@ const ManageQuizzes = () => {
         <PageTitle value={MANAGE_QUIZZES_PAGE_TITLE} />
         <div className={styles.actions}>
           <Tooltip id='export' />
-          <PiExportBold onClick={exportQuizzes} className={styles.icon} data-tooltip-id='export' data-tooltip-content={EXPORT} />
+          <PiExportBold
+            onClick={exportQuizzes}
+            className={styles.icon}
+            data-tooltip-id='export'
+            data-tooltip-content={EXPORT}
+          />
           <Tooltip id='import' />
           <BiImport
             onClick={() => navigate('/admin/quiz/import')}

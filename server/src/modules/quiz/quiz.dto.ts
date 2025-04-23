@@ -11,8 +11,9 @@ export class CreateQuizDto {
   @IsString()
   description?: string;
 
-  @IsString()
-  tags: string;
+  @IsArray()
+  @IsString({ each: true })
+  tags: string[];
 
   @IsOptional()
   @IsString()

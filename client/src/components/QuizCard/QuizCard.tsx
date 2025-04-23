@@ -1,18 +1,18 @@
+import { IQuiz } from '@/types/IQuiz'
 import { Link } from 'react-router-dom'
 import styles from './QuizCard.module.css'
-import { Quiz } from '@/models/Quiz'
 
 type QuizCardProps = {
-  quiz: Quiz
+  quiz: IQuiz
 }
 
 const QuizCard = ({ quiz }: QuizCardProps) => {
   return (
     <Link className={styles.container} to={`/quiz/${quiz.id}`}>
-      <img src={quiz.thumbnail} alt='' />
+      <img src={quiz.thumbnail} alt='thumbnail' />
       <div className={styles.bottom}>
         <div className={styles.tags}>
-          {quiz.tags.map((tag) => (
+          {JSON.parse(quiz.tags).map((tag: string) => (
             <span key={tag}>{tag}</span>
           ))}
         </div>

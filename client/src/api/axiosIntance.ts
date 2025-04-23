@@ -66,7 +66,6 @@ axiosInstance.interceptors.response.use(
     /* Xử lý Refresh Token tự động */
     // Trường hợp 1: Nếu như nhận mã 401 từ BE, thì gọi api đăng xuất luôn
     if (error?.response?.status === 401) {
-      console.log('401')
       ;(axiosReduxStore.dispatch as AppDispatch)(logoutUserAPI({ refreshToken: currentRefreshToken }))
     }
 
@@ -121,8 +120,14 @@ axiosInstance.interceptors.response.use(
     // Xử lý tập trung phần hiển thị thông báo lỗi trả về từ mọi API ở đây (viết code một lần: Clean Code)
     // console.log error ra là sẽ thấy cấu trúc data dẫn tới message lỗi như dưới đây
     let errorMessage = error?.message
-    if (error?.response?.data?.message) {
-      errorMessage = error?.response?.data?.message
+    const responseMessage = error?.response?.data?.message
+
+    if (responseMessage) {
+      if (Array.isArray(responseMessage)) {
+        errorMessage = responseMessage.map((item) => item.error).join(', ')
+      } else if (typeof responseMessage === 'string') {
+        errorMessage = responseMessage
+      }
     }
 
     // Dùng toastify để hiển thị bất kể mọi mã lỗi lên màn hình – Ngoại trừ mã 410 – GONE phục vụ việc tự động refresh lại token.

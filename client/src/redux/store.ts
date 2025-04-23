@@ -4,6 +4,7 @@ import { persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import { authReducer } from './authSlice'
 import { userReducer } from './userSlice'
+import { quizReducer } from './quizSlice'
 
 const rootPersistConfig = {
   key: 'root', // key của cái persist đó chúng ta chỉ định, cứ để mặc định là root
@@ -14,7 +15,8 @@ const rootPersistConfig = {
 
 const rootReducer = combineReducers({
   auth: authReducer,
-  user: userReducer
+  user: userReducer,
+  quiz: quizReducer
 })
 const persistedReducer = persistReducer(rootPersistConfig, rootReducer)
 

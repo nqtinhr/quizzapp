@@ -1,10 +1,4 @@
-import { useEffect, useState } from 'react'
-import { LuHistory, LuLogOut, LuSettings, LuUsers } from 'react-icons/lu'
-import { MdOutlineKeyboardArrowDown } from 'react-icons/md'
-import { Link, useNavigate } from 'react-router-dom'
-import ConfirmModal from '../ConfirmModal/ConfirmModal'
-import AdminLabel from '../Label/AdminLabel'
-import styles from './Profile.module.css'
+import { permissions } from '@/config/rbacConfig'
 import {
   HISTORY,
   LOGOUT,
@@ -14,10 +8,19 @@ import {
   QUIZ,
   USERS
 } from '@/constants/common'
+import { usePermission } from '@/hooks/usePermission'
+import { logoutUserAPI, selectRefreshToken } from '@/redux/authSlice'
 import { useAppDispatch, useAppSelector } from '@/redux/store'
 import { clearUser, selectCurrentUser } from '@/redux/userSlice'
-import { logoutUserAPI, selectRefreshToken } from '@/redux/authSlice'
+import { IRole } from '@/types/IRole'
+import { useEffect, useState } from 'react'
+import { LuHistory, LuLogOut, LuSettings, LuUsers } from 'react-icons/lu'
+import { MdOutlineKeyboardArrowDown } from 'react-icons/md'
+import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import ConfirmModal from '../ConfirmModal/ConfirmModal'
+import RoleLabel from '../Label/RoleLabel'
+import styles from './Profile.module.css'
 
 const Profile = () => {
   const [openLogoutModal, setOpenLogoutModal] = useState(false)
@@ -28,6 +31,8 @@ const Profile = () => {
   const dispatch = useAppDispatch()
   const user = useAppSelector(selectCurrentUser)
   const refreshToken = useAppSelector(selectRefreshToken)
+
+  const { hasPermission } = usePermission(user?.role as IRole)
 
   useEffect(() => {
     document.addEventListener('click', () => setShowDropdown(false))
@@ -52,28 +57,43 @@ const Profile = () => {
   return (
     <div className={styles.container}>
       <div onClick={toggleDropdown} className={styles.profile}>
-        <img className={styles.avatar} src={user?.picture} alt='Avatar' />
+        {user?.picture ? (
+          <img className={styles.avatar} src={user.picture} alt='Avatar' />
+        ) : (
+          <div className={styles.fallbackAvatar}>{user?.name?.charAt(0).toUpperCase()}</div>
+        )}
         <span className={styles.email}>{user?.email}</span>
         <MdOutlineKeyboardArrowDown className={styles.dropdownIcon} />
       </div>
       <div className={[styles.dropdown, showDropdown ? styles.show : ''].join(' ')}>
         <p className={styles.username}>
-          <img className={styles.avatar} src={user?.picture} alt='Avatar' />
+          {user?.picture ? (
+            <img className={styles.avatar} src={user.picture} alt='Avatar' />
+          ) : (
+            <div className={styles.fallbackAvatar}>{user?.name?.charAt(0).toUpperCase()}</div>
+          )}
           {user?.name}
-          <AdminLabel />
+          <RoleLabel />
         </p>
+
         {user && (
           <>
-            <Link className={styles.menuItem} to='/admin/quiz'>
-              <LuSettings className={styles.icon} />
-              {QUIZ}
-            </Link>
-            <Link className={styles.menuItem} to='/admin/users'>
-              <LuUsers className={styles.icon} />
-              {USERS}
-            </Link>
+            {hasPermission(permissions.VIEW_QUIZ) && (
+              <Link className={styles.menuItem} to='/admin/quiz'>
+                <LuSettings className={styles.icon} />
+                {QUIZ}
+              </Link>
+            )}
+
+            {hasPermission(permissions.VIEW_USER) && (
+              <Link className={styles.menuItem} to='/admin/users'>
+                <LuUsers className={styles.icon} />
+                {USERS}
+              </Link>
+            )}
           </>
         )}
+
         <Link className={styles.menuItem} to='/history'>
           <LuHistory className={styles.icon} />
           {HISTORY}

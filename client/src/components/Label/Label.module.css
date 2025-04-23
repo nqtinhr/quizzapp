@@ -14,3 +14,21 @@
     margin-left: 1rem;
 }
 
+.client {
+    background-color: var(--blue-color);
+    padding: .2rem 1rem;
+    border-radius: .2rem;
+    color: var(--white-color);
+    font-weight: 600;
+    margin-left: 1rem;
+}
+
+.moderator {
+    background-color: var(--green-color);
+    padding: .2rem 1rem;
+    border-radius: .2rem;
+    color: var(--white-color);
+    font-weight: 600;
+    margin-left: 1rem;
+}
+

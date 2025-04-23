@@ -29,7 +29,7 @@ export class QuizService {
         data: {
           title,
           description,
-          tags,
+          tags: JSON.stringify(tags),
           thumbnail,
         },
       });
@@ -129,7 +129,7 @@ export class QuizService {
     })
   }
 
-  async createMultiple(data: CreateQuizDto[]): Promise<void> {
-    await this.prismaService.quiz.createMany({ data })
-  }
+  // async createMultiple(data: CreateQuizDto[]): Promise<void> {
+  //   await this.prismaService.quiz.createMany({ data })
+  // }
 }

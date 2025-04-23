@@ -67,6 +67,6 @@ export class QuizController {
     await this.quizService.deleteByTitles(titles)
 
     // 2. Thêm danh sách quiz mới vào database
-    await this.quizService.createMultiple(data)
+    // await this.quizService.createMultiple(data)
   }
 }

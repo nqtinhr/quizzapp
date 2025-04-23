@@ -74,7 +74,7 @@ export const NOT_FOUND_PAGE_TITLE = 'Page Not Found'
 
 export const ADMIN_RESERVED_PAGE = 'Only admin users can access this page'
 export const LOGGED_IN_RESERVED_PAGE = 'You must log in to access this page'
-export const ALL_RIGHTS_RESERVED = '© 2024 Quizz App. All rights reserved'
+export const ALL_RIGHTS_RESERVED = '© 2025 Quizz App. All rights reserved'
 export const NO_DATA_FOUND = 'No data found'
 
 export const URL_BEFORE_LOGIN = 'url-before-login'
