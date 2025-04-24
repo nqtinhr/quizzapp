@@ -1,4 +1,5 @@
 import { Exclude } from 'class-transformer'
+import { PaginationMetaDto } from 'src/shared/models/paging.model'
 
 export class ProfileResDto {
   id: string
@@ -6,7 +7,10 @@ export class ProfileResDto {
   email: string
   picture: string
   role: string
-  @Exclude() password: string
+
+  @Exclude()
+  password: string
+
   createdAt: Date
   updatedAt: Date
 
@@ -14,3 +18,16 @@ export class ProfileResDto {
     Object.assign(this, partial)
   }
 }
+
+
+
+export class GetAllUsersResDto {
+  data: ProfileResDto[]
+  meta: PaginationMetaDto
+
+  constructor(data: any[], meta: PaginationMetaDto) {
+    this.data = data.map((item) => new ProfileResDto(item))
+    this.meta = meta
+  }
+}
+

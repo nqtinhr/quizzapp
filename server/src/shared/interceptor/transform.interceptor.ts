@@ -14,6 +14,11 @@ export class TransformInterceptor<T> implements NestInterceptor<T, Response<T>> 
         const ctx = context.switchToHttp()
         const response = ctx.getResponse()
         const statusCode = response.statusCode
+
+        if (data && typeof data === 'object' && 'data' in data) {
+          return { ...data, statusCode }
+        }
+      
         return { data, statusCode }
       })
     )

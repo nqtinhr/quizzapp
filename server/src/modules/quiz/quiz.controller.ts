@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Res, UploadedFile, UseInterceptors } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Res, UploadedFile, UseInterceptors } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { Quiz, UserRole } from '@prisma/client'
 import { Response } from 'express'
@@ -6,21 +6,20 @@ import * as fs from 'fs'
 import { Multer } from 'multer'
 import { AuthType, ConditionGuard } from 'src/shared/constants/auth.constant'
 import { Auth } from 'src/shared/decorators/auth.decorator'
-import { CreateQuizDto, GetQuizItemDto } from './quiz.dto'
+import { CreateQuizDto, GetAllQuizzesResDto } from './quiz.dto'
 import { QuizService } from './quiz.service'
 import { Roles } from 'src/shared/decorators/roles.decorator'
+import { PaginationQueryDto } from 'src/shared/models/paging.model'
 
 @Controller('quizes')
 export class QuizController {
   constructor(private readonly quizService: QuizService) {}
 
-  @Auth([AuthType.Bearer, AuthType.APIKey], { condition: ConditionGuard.Or })
   @Get()
-  getQuizes(): Promise<Quiz[]> {
-    return this.quizService.getQuizes()
+  async getQuizes(@Query() query: PaginationQueryDto): Promise<GetAllQuizzesResDto> {
+    return await this.quizService.getQuizes(query)
   }
 
-  @Auth([AuthType.Bearer, AuthType.APIKey], { condition: ConditionGuard.Or })
   @Get(':id')
   getQuizById(@Param('id') id: string): Promise<Quiz | null> {
     return this.quizService.getQuizById(id)
@@ -30,7 +29,7 @@ export class QuizController {
   @Auth([AuthType.Bearer, AuthType.APIKey], { condition: ConditionGuard.Or })
   @Post()
   async createQuiz(@Body() body: CreateQuizDto): Promise<Quiz> {
-    return new GetQuizItemDto(await this.quizService.createQuiz(body))
+    return await this.quizService.createQuiz(body)
   }
 
   @Roles(UserRole.ADMIN)

@@ -1,7 +1,20 @@
+import { Type } from 'class-transformer';
 import { IsString, IsOptional, IsArray, IsInt, IsUUID } from 'class-validator';
+import { PaginationMetaDto } from 'src/shared/models/paging.model';
 import { QuizModel } from 'src/shared/models/quiz.model';
 
-export class GetQuizItemDto extends QuizModel {}
+
+export class GetAllQuizzesResDto {
+  @Type(() => QuizModel)
+  data: QuizModel[]
+
+  meta: PaginationMetaDto
+
+  constructor(data: QuizModel[], meta: PaginationMetaDto) {
+    this.data = data
+    this.meta = meta
+  }
+}
 
 export class CreateQuizDto {
   @IsString()

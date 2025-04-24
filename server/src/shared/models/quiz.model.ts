@@ -5,7 +5,7 @@ export class QuizModel {
   tags: string
   thumbnail: string | null
   questions: QuizQuestionModel[]
-  plays: QuizPlayModel[]
+  plays?: QuizPlayModel[]
 
   constructor(partial: Partial<QuizModel>) {
     Object.assign(this, partial)

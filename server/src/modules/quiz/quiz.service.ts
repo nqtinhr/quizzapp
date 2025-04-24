@@ -2,15 +2,38 @@ import { Injectable, NotFoundException } from '@nestjs/common'
 import { Quiz } from '@prisma/client'
 import { PrismaService } from 'src/shared/services/prisma.service'
 import { CreateQuizDto, QuizQuestionDto, UpdateQuizDto } from './quiz.dto'
+import { PaginationMetaDto, PaginationQueryDto } from 'src/shared/models/paging.model'
 
 @Injectable()
 export class QuizService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async getQuizes(): Promise<Quiz[]> {
-    return this.prismaService.quiz.findMany({
-      include: { questions: true }
-    })
+  async getQuizes(query: PaginationQueryDto) {
+    const page = query.page ?? 1
+    const limit = query.limit ?? 10
+    const search = query.search?.trim()
+
+    const where = search ? { title: { contains: search } } : {}
+
+    const [quizzes, totalRows] = await this.prismaService.$transaction([
+      this.prismaService.quiz.findMany({
+        where,
+        skip: (page - 1) * limit,
+        take: limit,
+        include: { questions: true, plays: true }
+        // orderBy: { createdAt: 'desc' }
+      }),
+      this.prismaService.quiz.count({ where })
+    ])
+
+    return {
+      data: quizzes,
+      meta: new PaginationMetaDto({
+        page,
+        limit,
+        totalRows
+      })
+    }
   }
 
   async getQuizById(id: string): Promise<Quiz | null> {
@@ -22,7 +45,7 @@ export class QuizService {
 
   async createQuiz(body: CreateQuizDto): Promise<Quiz> {
     try {
-      const { title, description, tags, thumbnail, questions } = body;
+      const { title, description, tags, thumbnail, questions } = body
 
       // Bước 1: Tạo Quiz
       const quiz = await this.prismaService.quiz.create({
@@ -30,32 +53,32 @@ export class QuizService {
           title,
           description,
           tags: JSON.stringify(tags),
-          thumbnail,
-        },
-      });
-  
+          thumbnail
+        }
+      })
+
       // Bước 2: Tạo các câu hỏi cho quiz
-      await this.createQuestions(quiz.id, questions);
-  
-      return quiz;
+      await this.createQuestions(quiz.id, questions)
+
+      return quiz
     } catch (error) {
-      console.log(error);
-      throw new error
+      console.log(error)
+      throw new error()
     }
   }
 
   // Phương thức để tạo câu hỏi cho Quiz
   private async createQuestions(quizId: string, questions: QuizQuestionDto[]) {
-    const questionData = questions.map(q => ({
+    const questionData = questions.map((q) => ({
       quizId,
       question: q.question,
       options: JSON.stringify(q.options),
-      answerIndex: q.answerIndex,
-    }));
+      answerIndex: q.answerIndex
+    }))
 
     await this.prismaService.quizQuestion.createMany({
-      data: questionData,
-    });
+      data: questionData
+    })
   }
 
   async updateQuiz(id: string, data: UpdateQuizDto): Promise<Quiz> {
@@ -99,27 +122,26 @@ export class QuizService {
   async deleteQuiz(id: string): Promise<void> {
     const quiz = await this.prismaService.quiz.findUnique({
       where: { id },
-      include: { questions: true, plays: true },
-    });
-  
+      include: { questions: true, plays: true }
+    })
+
     if (!quiz) {
-      throw new NotFoundException(`Quiz with id ${id} not found`);
+      throw new NotFoundException(`Quiz with id ${id} not found`)
     }
-  
+
     // Xóa các mục liên quan trước (tuân theo ràng buộc FK)
     await this.prismaService.quizPlay.deleteMany({
-      where: { quizId: id },
-    });
-  
+      where: { quizId: id }
+    })
+
     await this.prismaService.quizQuestion.deleteMany({
-      where: { quizId: id },
-    });
-  
+      where: { quizId: id }
+    })
+
     await this.prismaService.quiz.delete({
-      where: { id },
-    });
+      where: { id }
+    })
   }
-  
 
   async deleteByTitles(titles: string[]): Promise<void> {
     await this.prismaService.quiz.deleteMany({
