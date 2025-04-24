@@ -33,6 +33,7 @@ const UnauthorizedRoute = ({ user }: { user: IUser | null }) => {
 function App() {
   const dispatch = useAppDispatch()
   const currentUser = useAppSelector(selectCurrentUser)
+  console.log("🚀 ~ App ~ currentUser:", currentUser)
   const accessToken = useAppSelector(selectAccessToken)
   const calledProfileRef = useRef(false)
 

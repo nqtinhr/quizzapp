@@ -9,7 +9,7 @@ import { quizReducer } from './quizSlice'
 const rootPersistConfig = {
   key: 'root', // key của cái persist đó chúng ta chỉ định, cứ để mặc định là root
   storage: storage, // Biến storage ở trên - lưu vào localstorage
-  whitelist: ['auth'] // định nghĩa các slice dữ liệu ĐƯỢC PHÉP duy trì qua mỗi lần f5 trình duyệt
+  whitelist: ['auth', 'user'] // định nghĩa các slice dữ liệu ĐƯỢC PHÉP duy trì qua mỗi lần f5 trình duyệt
   // blacklist: ['user'] // định nghĩa các slice KHÔNG ĐƯỢC PHÉP duy trì qua mỗi lần f5 trình duyệt
 }
 

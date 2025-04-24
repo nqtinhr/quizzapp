@@ -8,7 +8,7 @@ export interface IQuiz {
   id: string
   title: string
   description: string
-  tags: string
+  tags: string[]
   thumbnail: string
   questions: IQuizQuestion[]
 }

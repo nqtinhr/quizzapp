@@ -1,12 +1,12 @@
-import { Quiz } from '@/models/Quiz'
-import styles from './PlayQuizQuestions.module.css'
-import { useRef, useState } from 'react'
 import Button from '@/components/Button/Button'
 import { NEXT_QUESTION, VIEW_QUIZ_RESULT } from '@/constants/common'
+import { IQuiz } from '@/types/IQuiz'
+import { useRef, useState } from 'react'
+import styles from './PlayQuizQuestions.module.css'
 
 type PlayQuizQuestionProps = {
   visible: boolean
-  quiz: Quiz
+  quiz: IQuiz
   onViewResult: (correctQuestionsNumber: number) => void
 }
 

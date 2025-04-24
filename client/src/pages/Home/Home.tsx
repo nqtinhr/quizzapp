@@ -16,13 +16,22 @@ const Home = () => {
     dispatch(quizListAPI())
   }, [dispatch])
 
+  const parsedQuizzes = quizzes.map((quiz) => ({
+    ...quiz,
+    tags: typeof quiz.tags === 'string' ? JSON.parse(quiz.tags) : quiz.tags,
+    questions: quiz.questions.map((question) => ({
+      ...question,
+      options: typeof question.options === 'string' ? JSON.parse(question.options) : question.options
+    }))
+  }))
+
   return (
     <>
       <Banner />
       <PageTitle value={HOME_PAGE_TITLE} />
       <Loader visible={loading} />
       <div className={styles.quizzes}>
-        {quizzes.map((quiz) => (
+        {parsedQuizzes.map((quiz) => (
           <QuizCard key={quiz.id} quiz={quiz} />
         ))}
       </div>

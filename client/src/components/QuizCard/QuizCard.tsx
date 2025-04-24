@@ -12,7 +12,7 @@ const QuizCard = ({ quiz }: QuizCardProps) => {
       <img src={quiz.thumbnail} alt='thumbnail' />
       <div className={styles.bottom}>
         <div className={styles.tags}>
-          {JSON.parse(quiz.tags).map((tag: string) => (
+          {quiz.tags.map((tag: string) => (
             <span key={tag}>{tag}</span>
           ))}
         </div>

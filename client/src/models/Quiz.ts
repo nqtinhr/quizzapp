@@ -4,7 +4,7 @@ export class Quiz {
   id = ''
   title = ''
   description = ''
-  tags = ''
+  tags = []
   thumbnail = ''
   questions = [new QuizQuestion()]
 }
