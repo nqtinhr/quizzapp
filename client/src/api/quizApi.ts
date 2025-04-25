@@ -1,8 +1,9 @@
+import { IPagination } from '@/types/IPagination'
 import axiosInstance from './axiosIntance'
 
 const quizApi = {
-  getQuizList() {
-    return axiosInstance.get('/quizes')
+  getQuizList(params?: IPagination) {
+    return axiosInstance.get('/quizes', { params })
   },
   getQuiz(id: string) {
     return axiosInstance.get(`/quizes/${id}`)

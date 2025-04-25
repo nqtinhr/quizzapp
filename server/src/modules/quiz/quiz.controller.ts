@@ -1,15 +1,14 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Res, UploadedFile, UseInterceptors } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UploadedFile, UseInterceptors } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { Quiz, UserRole } from '@prisma/client'
-import { Response } from 'express'
 import * as fs from 'fs'
 import { Multer } from 'multer'
 import { AuthType, ConditionGuard } from 'src/shared/constants/auth.constant'
 import { Auth } from 'src/shared/decorators/auth.decorator'
-import { CreateQuizDto, GetAllQuizzesResDto } from './quiz.dto'
-import { QuizService } from './quiz.service'
 import { Roles } from 'src/shared/decorators/roles.decorator'
-import { PaginationQueryDto } from 'src/shared/models/paging.model'
+import { PaginationDto, PaginationQueryDto } from 'src/shared/models/paging.model'
+import { CreateQuizDto, GetAllQuizzesResDto, GetQuizItemResDto } from './quiz.dto'
+import { QuizService } from './quiz.service'
 
 @Controller('quizes')
 export class QuizController {
@@ -17,19 +16,20 @@ export class QuizController {
 
   @Get()
   async getQuizes(@Query() query: PaginationQueryDto): Promise<GetAllQuizzesResDto> {
-    return await this.quizService.getQuizes(query)
+    const { data, pagination } = await this.quizService.getQuizes(query)
+    return new GetAllQuizzesResDto(data, new PaginationDto(pagination))
   }
 
   @Get(':id')
-  getQuizById(@Param('id') id: string): Promise<Quiz | null> {
-    return this.quizService.getQuizById(id)
+  async getQuizById(@Param('id') id: string): Promise<GetQuizItemResDto> {
+    return new GetQuizItemResDto(await this.quizService.getQuizById(id))
   }
 
   @Roles(UserRole.MODERATOR, UserRole.ADMIN)
   @Auth([AuthType.Bearer, AuthType.APIKey], { condition: ConditionGuard.Or })
   @Post()
-  async createQuiz(@Body() body: CreateQuizDto): Promise<Quiz> {
-    return await this.quizService.createQuiz(body)
+  async createQuiz(@Body() body: CreateQuizDto): Promise<GetQuizItemResDto> {
+    return new GetQuizItemResDto(await this.quizService.createQuiz(body))
   }
 
   @Roles(UserRole.ADMIN)
@@ -46,14 +46,14 @@ export class QuizController {
     return this.quizService.deleteQuiz(id)
   }
 
-  @Roles(UserRole.MODERATOR, UserRole.ADMIN)
-  @Auth([AuthType.Bearer, AuthType.APIKey], { condition: ConditionGuard.Or })
-  @Get('export')
-  async exportQuizzes(@Res() res: Response) {
-    const quizzes = await this.quizService.getQuizes()
-    res.setHeader('Content-Disposition', 'attachment; filename=quizzes.json')
-    res.json(quizzes)
-  }
+  // @Roles(UserRole.MODERATOR, UserRole.ADMIN)
+  // @Auth([AuthType.Bearer, AuthType.APIKey], { condition: ConditionGuard.Or })
+  // @Get('export')
+  // async exportQuizzes(@Res() res: Response) {
+  //   const quizzes = await this.quizService.getQuizes()
+  //   res.setHeader('Content-Disposition', 'attachment; filename=quizzes.json')
+  //   res.json(quizzes)
+  // }
 
   @Roles(UserRole.MODERATOR, UserRole.ADMIN)
   @Auth([AuthType.Bearer, AuthType.APIKey], { condition: ConditionGuard.Or })

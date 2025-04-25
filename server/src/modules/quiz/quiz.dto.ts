@@ -1,99 +1,108 @@
-import { Type } from 'class-transformer';
-import { IsString, IsOptional, IsArray, IsInt, IsUUID } from 'class-validator';
-import { PaginationMetaDto } from 'src/shared/models/paging.model';
-import { QuizModel } from 'src/shared/models/quiz.model';
-
+import { Type } from 'class-transformer'
+import { IsString, IsOptional, IsArray, IsInt, IsUUID } from 'class-validator'
+import { PaginationDto } from 'src/shared/models/paging.model'
+import { QuizModel, QuizPlayModel, QuizQuestionModel } from 'src/shared/models/quiz.model'
 
 export class GetAllQuizzesResDto {
   @Type(() => QuizModel)
   data: QuizModel[]
 
-  meta: PaginationMetaDto
+  pagination: PaginationDto
 
-  constructor(data: QuizModel[], meta: PaginationMetaDto) {
-    this.data = data
-    this.meta = meta
+  constructor(data: any[], pagination: PaginationDto) {
+    this.data = data.map((item) => new QuizModel(item))
+    this.pagination = pagination
+  }
+}
+
+export class GetQuizItemResDto extends QuizModel {
+  constructor(partial: Partial<GetQuizItemResDto>) {
+    super(partial)
+    this.tags = typeof partial.tags === 'string' ? JSON.parse(partial.tags) : (partial.tags ?? [])
+    this.questions = (partial.questions ?? []).map((q) => new QuizQuestionModel(q))
+    this.plays = (partial.plays ?? []).map((p) => new QuizPlayModel(p))
+    // Object.assign(this, partial)
   }
 }
 
 export class CreateQuizDto {
   @IsString()
-  title: string;
+  title: string
 
   @IsOptional()
   @IsString()
-  description?: string;
+  description?: string
 
   @IsArray()
   @IsString({ each: true })
-  tags: string[];
+  tags: string[]
 
   @IsOptional()
   @IsString()
-  thumbnail?: string;
+  thumbnail?: string
 
   @IsArray()
-  questions: QuizQuestionDto[];
+  questions: QuizQuestionDto[]
 
   @IsArray()
-  plays?: QuizPlayDto[];
+  plays?: QuizPlayDto[]
 }
 
 export class QuizQuestionDto {
   @IsString()
-  question: string;
+  question: string
 
   @IsArray()
-  options: string[];
+  options: string[]
 
   @IsInt()
-  answerIndex: number;
+  answerIndex: number
 }
 
 export class QuizPlayDto {
   @IsString()
-  userId: string;
+  userId: string
 
   @IsString()
-  quizId: string;
+  quizId: string
 }
 
 export class UpdateQuizDto {
   @IsOptional()
   @IsString()
-  title?: string;
+  title?: string
 
   @IsOptional()
   @IsString()
-  description?: string;
+  description?: string
 
   @IsOptional()
   @IsString()
-  tags?: string;
+  tags?: string
 
   @IsOptional()
   @IsString()
-  thumbnail?: string;
+  thumbnail?: string
 
   @IsOptional()
   @IsArray()
-  questions?: UpdateQuizQuestionDto[];
+  questions?: UpdateQuizQuestionDto[]
 }
 
 export class UpdateQuizQuestionDto {
   @IsOptional()
   @IsUUID()
-  id?: string;
+  id?: string
 
   @IsOptional()
   @IsString()
-  question?: string;
+  question?: string
 
   @IsOptional()
   @IsArray()
-  options?: string[];
+  options?: string[]
 
   @IsOptional()
   @IsInt()
-  answerIndex?: number;
+  answerIndex?: number
 }

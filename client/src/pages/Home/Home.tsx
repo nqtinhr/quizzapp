@@ -10,20 +10,12 @@ import styles from './Home.module.css'
 
 const Home = () => {
   const dispatch = useAppDispatch()
-  const { quizzes, loading } = useAppSelector((state) => state.quiz)
+  const { quizzes, loading, pagination } = useAppSelector((state) => state.quiz)
+  const params = { page: pagination.page, limit: pagination.limit }
 
   useEffect(() => {
-    dispatch(quizListAPI())
+    dispatch(quizListAPI({params }))
   }, [dispatch])
-
-  const parsedQuizzes = quizzes.map((quiz) => ({
-    ...quiz,
-    tags: typeof quiz.tags === 'string' ? JSON.parse(quiz.tags) : quiz.tags,
-    questions: quiz.questions.map((question) => ({
-      ...question,
-      options: typeof question.options === 'string' ? JSON.parse(question.options) : question.options
-    }))
-  }))
 
   return (
     <>
@@ -31,7 +23,7 @@ const Home = () => {
       <PageTitle value={HOME_PAGE_TITLE} />
       <Loader visible={loading} />
       <div className={styles.quizzes}>
-        {parsedQuizzes.map((quiz) => (
+        {quizzes.map((quiz) => (
           <QuizCard key={quiz.id} quiz={quiz} />
         ))}
       </div>

@@ -12,7 +12,7 @@ import {
   QUIZ_TITLE
 } from '@/constants/common'
 import { Quiz } from '@/models/Quiz'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { BiImport } from 'react-icons/bi'
 import { GrAdd } from 'react-icons/gr'
 import { PiExportBold } from 'react-icons/pi'
@@ -20,14 +20,19 @@ import { useNavigate } from 'react-router-dom'
 import Table from 'react-table-lite'
 import { Tooltip } from 'react-tooltip'
 import styles from './ManageQuizzes.module.css'
+import { useAppDispatch, useAppSelector } from '@/redux/store'
+import { quizListAPI } from '@/redux/quizSlice'
 
 const ManageQuizzes = () => {
-  const [quizzes, setQuizzes] = useState<Quiz[]>([])
+  const dispatch = useAppDispatch()
+  const { quizzes } = useAppSelector((state) => state.quiz)
+  console.log('🚀 ~ ManageQuizzes ~ quizzes:', quizzes)
+
   const navigate = useNavigate()
 
-  // useEffect(() => {
-  //   HttpClient.get<Quiz[]>('/quizzes').then((res) => setQuizzes(res.data))
-  // }, [])
+  useEffect(() => {
+    dispatch(quizListAPI())
+  }, [dispatch])
 
   const exportQuizzes = () => {
     // HttpClient.export('/quizzes/export', 'quizzes.json')
@@ -39,7 +44,6 @@ const ManageQuizzes = () => {
     //   () => ToastService.success(DELETE_WITH_SUCCESS),
     //   HttpClient.handleApiError
     // )
-    setQuizzes(quizzes.filter((q) => q.id !== quiz.id))
   }
 
   return (

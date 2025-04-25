@@ -38,7 +38,7 @@ export class UserService {
 
     return {
       data: users,
-      meta: {
+      pagination: {
         page,
         limit,
         totalRows

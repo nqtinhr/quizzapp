@@ -6,7 +6,7 @@ import { UserService } from './user.service'
 import { GetAllUsersResDto, ProfileResDto } from './user.dto'
 import { UserRole } from '@prisma/client'
 import { Roles } from 'src/shared/decorators/roles.decorator'
-import { PaginationMetaDto, PaginationQueryDto } from 'src/shared/models/paging.model'
+import { PaginationDto, PaginationQueryDto } from 'src/shared/models/paging.model'
 
 @Controller('users')
 export class UserController {
@@ -22,7 +22,7 @@ export class UserController {
   @Auth([AuthType.Bearer, AuthType.APIKey], { condition: ConditionGuard.Or })
   @Get()
   async getAllUsers(@Query() query: PaginationQueryDto) {
-    const { data, meta } = await this.userService.getAllUsers(query)
-    return new GetAllUsersResDto(data, new PaginationMetaDto(meta))
+    const { data, pagination } = await this.userService.getAllUsers(query)
+    return new GetAllUsersResDto(data, new PaginationDto(pagination))
   }
 }

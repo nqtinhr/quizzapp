@@ -3,10 +3,14 @@ import { IUser } from '@/types/IUser'
 import { ActionReducerMapBuilder, createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export interface UserState {
+  userList: IUser[]
+  loading: boolean
   currentUser: IUser | null
 }
 
 const initialState: UserState = {
+  userList: [],
+  loading: false,
   currentUser: null
 }
 

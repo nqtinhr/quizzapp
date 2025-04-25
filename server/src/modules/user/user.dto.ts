@@ -1,5 +1,5 @@
 import { Exclude } from 'class-transformer'
-import { PaginationMetaDto } from 'src/shared/models/paging.model'
+import { PaginationDto } from 'src/shared/models/paging.model'
 
 export class ProfileResDto {
   id: string
@@ -19,15 +19,12 @@ export class ProfileResDto {
   }
 }
 
-
-
 export class GetAllUsersResDto {
   data: ProfileResDto[]
-  meta: PaginationMetaDto
+  meta: PaginationDto
 
-  constructor(data: any[], meta: PaginationMetaDto) {
+  constructor(data: ProfileResDto[], meta: PaginationDto) {
     this.data = data.map((item) => new ProfileResDto(item))
     this.meta = meta
   }
 }
-
