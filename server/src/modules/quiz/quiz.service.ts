@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common'
 import { Quiz } from '@prisma/client'
 import { PaginationDto, PaginationQueryDto } from 'src/shared/models/paging.model'
 import { PrismaService } from 'src/shared/services/prisma.service'
-import { CreateQuizDto, QuizQuestionDto, UpdateQuizDto } from './quiz.dto'
+import { CreateQuizDto, PlayQuizResDto, QuizQuestionDto, UpdateQuizDto } from './quiz.dto'
 
 @Injectable()
 export class QuizService {
@@ -39,7 +39,7 @@ export class QuizService {
   async getQuizById(id: string): Promise<any> {
     const quiz = await this.prismaService.quiz.findUnique({
       where: { id },
-      include: { questions: true }
+      include: { questions: true, plays: true }
     })
 
     if (!quiz) {
@@ -130,7 +130,7 @@ export class QuizService {
     })
   }
 
-  async deleteQuiz(id: string): Promise<void> {
+  async deleteQuiz(id: string): Promise<boolean> {
     const quiz = await this.prismaService.quiz.findUnique({
       where: { id },
       include: { questions: true, plays: true }
@@ -140,18 +140,13 @@ export class QuizService {
       throw new NotFoundException(`Quiz with id ${id} not found`)
     }
 
-    // Xóa các mục liên quan trước (tuân theo ràng buộc FK)
-    await this.prismaService.quizPlay.deleteMany({
-      where: { quizId: id }
-    })
+    await this.prismaService.$transaction([
+      this.prismaService.quizPlay.deleteMany({ where: { quizId: id } }),
+      this.prismaService.quizQuestion.deleteMany({ where: { quizId: id } }),
+      this.prismaService.quiz.delete({ where: { id } })
+    ])
 
-    await this.prismaService.quizQuestion.deleteMany({
-      where: { quizId: id }
-    })
-
-    await this.prismaService.quiz.delete({
-      where: { id }
-    })
+    return true
   }
 
   async deleteByTitles(titles: string[]): Promise<void> {
@@ -162,6 +157,52 @@ export class QuizService {
     })
   }
 
+  async playQuiz(id: string, userId: string, correctQuestionsNumber: number): Promise<PlayQuizResDto> {
+    const quiz = await this.prismaService.quiz.findUnique({
+      where: { id },
+      include: { questions: true }
+    })
+
+    if (!quiz) {
+      throw new NotFoundException('Quiz not found')
+    }
+
+    const quizPlay = await this.prismaService.quizPlay.create({
+      data: {
+        quizId: id,
+        userId: userId,
+        correctQuestionsNumber
+      }
+    })
+
+    return new PlayQuizResDto(quizPlay)
+  }
+
+  async getQuizPlays(userId): Promise<PlayQuizResDto[]> {
+    const quizPlays = await this.prismaService.quizPlay.findMany({
+      where: { userId },
+      include: {
+        quiz: {
+          select: {
+            id: true,
+            title: true
+          }
+        },
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            picture: true
+          }
+        }
+      }
+    })
+    return quizPlays.map((qp) => new PlayQuizResDto(qp))
+  }
+
+  // Trả về các câu hỏi của quiz
+  // const quizQuestions = await this.prismaService.quizQuestion.findMany({
   // async createMultiple(data: CreateQuizDto[]): Promise<void> {
   //   await this.prismaService.quiz.createMany({ data })
   // }

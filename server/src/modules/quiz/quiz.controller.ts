@@ -7,8 +7,9 @@ import { AuthType, ConditionGuard } from 'src/shared/constants/auth.constant'
 import { Auth } from 'src/shared/decorators/auth.decorator'
 import { Roles } from 'src/shared/decorators/roles.decorator'
 import { PaginationDto, PaginationQueryDto } from 'src/shared/models/paging.model'
-import { CreateQuizDto, GetAllQuizzesResDto, GetQuizItemResDto } from './quiz.dto'
+import { CreateQuizDto, GetAllQuizzesResDto, GetQuizItemResDto, PlayQuizDto, PlayQuizResDto } from './quiz.dto'
 import { QuizService } from './quiz.service'
+import { ActiveUser } from 'src/shared/decorators/active-user.decorator'
 
 @Controller('quizes')
 export class QuizController {
@@ -42,8 +43,20 @@ export class QuizController {
   @Roles(UserRole.ADMIN)
   @Auth([AuthType.Bearer, AuthType.APIKey], { condition: ConditionGuard.Or })
   @Delete(':id')
-  async deleteQuiz(@Param('id') id: string): Promise<void> {
+  async deleteQuiz(@Param('id') id: string): Promise<boolean> {
     return this.quizService.deleteQuiz(id)
+  }
+
+  @Auth([AuthType.Bearer, AuthType.APIKey], { condition: ConditionGuard.Or })
+  @Post(':id/plays')
+  async playQuiz(@Param('id') id: string, @ActiveUser('userId') userId: string, @Body() body: PlayQuizDto) {
+    return new PlayQuizResDto(await this.quizService.playQuiz(id, userId, body.correctQuestionsNumber))
+  }
+
+  @Auth([AuthType.Bearer, AuthType.APIKey], { condition: ConditionGuard.Or })
+  @Get('history/plays')
+  async getQuizPlays(@ActiveUser('userId') userId: string) {
+    return await this.quizService.getQuizPlays(userId)
   }
 
   // @Roles(UserRole.MODERATOR, UserRole.ADMIN)

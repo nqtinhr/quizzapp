@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer'
-import { IsString, IsOptional, IsArray, IsInt, IsUUID } from 'class-validator'
+import { IsString, IsOptional, IsArray, IsInt, IsUUID, Min } from 'class-validator'
 import { PaginationDto } from 'src/shared/models/paging.model'
 import { QuizModel, QuizPlayModel, QuizQuestionModel } from 'src/shared/models/quiz.model'
 
@@ -21,7 +21,6 @@ export class GetQuizItemResDto extends QuizModel {
     this.tags = typeof partial.tags === 'string' ? JSON.parse(partial.tags) : (partial.tags ?? [])
     this.questions = (partial.questions ?? []).map((q) => new QuizQuestionModel(q))
     this.plays = (partial.plays ?? []).map((p) => new QuizPlayModel(p))
-    // Object.assign(this, partial)
   }
 }
 
@@ -105,4 +104,17 @@ export class UpdateQuizQuestionDto {
   @IsOptional()
   @IsInt()
   answerIndex?: number
+}
+
+export class PlayQuizDto {
+  @IsInt()
+  @Min(0)
+  correctQuestionsNumber: number
+}
+
+export class PlayQuizResDto extends QuizPlayModel {
+  constructor(partial: Partial<PlayQuizResDto>) {
+    super(partial)
+    Object.assign(this, partial)
+  }
 }
