@@ -1,7 +1,7 @@
 import { QuizQuestion } from './QuizQuestion'
 
 export class Quiz {
-  id = ''
+  // id = ''
   title = ''
   description = ''
   tags = []

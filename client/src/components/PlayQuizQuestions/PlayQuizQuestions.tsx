@@ -1,6 +1,6 @@
 import Button from '@/components/Button/Button'
 import { NEXT_QUESTION, VIEW_QUIZ_RESULT } from '@/constants/common'
-import { IQuiz } from '@/types/IQuiz'
+import { IQuiz } from '@/types/quiz'
 import { useRef, useState } from 'react'
 import styles from './PlayQuizQuestions.module.css'
 

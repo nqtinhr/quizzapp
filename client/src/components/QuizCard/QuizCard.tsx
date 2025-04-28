@@ -1,4 +1,4 @@
-import { IQuiz } from '@/types/IQuiz'
+import { IQuiz } from '@/types/quiz'
 import { Link } from 'react-router-dom'
 import styles from './QuizCard.module.css'
 

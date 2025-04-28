@@ -16,3 +16,8 @@ export interface IResponse<T> {
   data: T
   pagination: IPaginationMeta
 }
+
+export interface IResult {
+  data: any
+  statusCode: number
+}

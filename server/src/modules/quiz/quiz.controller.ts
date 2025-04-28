@@ -1,15 +1,15 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UploadedFile, UseInterceptors } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
-import { Quiz, UserRole } from '@prisma/client'
+import { UserRole } from '@prisma/client'
 import * as fs from 'fs'
 import { Multer } from 'multer'
 import { AuthType, ConditionGuard } from 'src/shared/constants/auth.constant'
+import { ActiveUser } from 'src/shared/decorators/active-user.decorator'
 import { Auth } from 'src/shared/decorators/auth.decorator'
 import { Roles } from 'src/shared/decorators/roles.decorator'
 import { PaginationDto, PaginationQueryDto } from 'src/shared/models/paging.model'
-import { CreateQuizDto, GetAllQuizzesResDto, GetQuizItemResDto, PlayQuizDto, PlayQuizResDto } from './quiz.dto'
+import { CreateQuizDto, GetAllQuizzesResDto, GetQuizItemResDto, PlayQuizDto, PlayQuizResDto, UpdateQuizDto } from './quiz.dto'
 import { QuizService } from './quiz.service'
-import { ActiveUser } from 'src/shared/decorators/active-user.decorator'
 
 @Controller('quizes')
 export class QuizController {
@@ -36,8 +36,8 @@ export class QuizController {
   @Roles(UserRole.ADMIN)
   @Auth([AuthType.Bearer, AuthType.APIKey], { condition: ConditionGuard.Or })
   @Patch(':id')
-  async updateQuiz(@Param('id') id: string, @Body() quizData: any): Promise<Quiz> {
-    return this.quizService.updateQuiz(id, quizData)
+  async updateQuiz(@Param('id') id: string, @Body() quizData: UpdateQuizDto): Promise<GetQuizItemResDto> {
+    return new GetQuizItemResDto(await this.quizService.updateQuiz(id, quizData))
   }
 
   @Roles(UserRole.ADMIN)

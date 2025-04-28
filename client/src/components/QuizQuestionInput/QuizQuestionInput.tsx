@@ -1,6 +1,6 @@
 import { DELETE, QUIZ_OPTIONS, QUIZ_QUESTION } from '@/constants/common'
-import { QuizQuestion } from '@/models/QuizQuestion'
 import { QuizQuestionErrors } from '@/models/QuizValidator'
+import { IQuizQuestion } from '@/types/quiz'
 import { ChangeEvent } from 'react'
 import { LiaTimesSolid } from 'react-icons/lia'
 import { Tooltip } from 'react-tooltip'
@@ -11,10 +11,10 @@ import QuizOptionInput from '../QuizOptionInput/QuizOptionInput'
 import styles from './QuizQuestionInput.module.css'
 
 type QuizQuestionInputProps = {
-  value: QuizQuestion
+  value: IQuizQuestion
   index: number
   errors: QuizQuestionErrors
-  onChange: (newValue: QuizQuestion, questionIndex: number) => void
+  onChange: (newValue: IQuizQuestion, questionIndex: number) => void
   onRemove: (questionIndex: number) => void
 }
 

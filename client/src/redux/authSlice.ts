@@ -1,5 +1,5 @@
 import authApi from '@/api/authApi'
-import { ILogin, IRefreshToken } from '@/types/IAuth'
+import { ILogin, IRefreshToken } from '@/types/auth'
 import { ActionReducerMapBuilder, createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export interface AuthState {

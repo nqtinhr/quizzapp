@@ -1,6 +1,6 @@
 import quizApi from '@/api/quizApi'
-import { IPagination, IResponse } from '@/types/IPagination'
-import { IQuiz } from '@/types/IQuiz'
+import { IPagination, IResponse } from '@/types/common'
+import { IQuiz } from '@/types/quiz'
 import { ActionReducerMapBuilder, createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export interface QuizState {
@@ -18,7 +18,7 @@ const initialState: QuizState = {
   loading: true,
   pagination: {
     page: 1,
-    limit: 10,
+    limit: 9,
     totalRows: 0
   }
 }
@@ -26,15 +26,20 @@ const initialState: QuizState = {
 export const quizListAPI = createAsyncThunk<IResponse<IQuiz[]>, { params?: IPagination }>(
   'quiz/quizListAPI',
   async ({ params }) => {
-    const result = await quizApi.getQuizList(params) 
-    return result
+    const result = await quizApi.getQuizList(params)
+    return result as unknown as IResponse<IQuiz[]>
   }
 )
 
 export const quizSlice = createSlice({
   name: 'quiz',
   initialState,
-  reducers: {},
+  reducers: {
+    removeQuiz(state, action: PayloadAction<string>) {
+      state.quizzes = state.quizzes.filter((quiz) => quiz.id !== action.payload)
+      state.pagination.totalRows -= 1
+    }
+  },
   extraReducers: (builder: ActionReducerMapBuilder<QuizState>) => {
     builder
       .addCase(quizListAPI.fulfilled, (state, action: PayloadAction<IResponse<IQuiz[]>>) => {
@@ -48,4 +53,5 @@ export const quizSlice = createSlice({
   }
 })
 
+export const { removeQuiz } = quizSlice.actions
 export const quizReducer = quizSlice.reducer

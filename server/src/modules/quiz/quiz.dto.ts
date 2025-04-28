@@ -43,6 +43,7 @@ export class CreateQuizDto {
   @IsArray()
   questions: QuizQuestionDto[]
 
+  @IsOptional()
   @IsArray()
   plays?: QuizPlayDto[]
 }
@@ -76,7 +77,8 @@ export class UpdateQuizDto {
   description?: string
 
   @IsOptional()
-  @IsString()
+  @IsArray()
+  @IsString({ each: true })
   tags?: string
 
   @IsOptional()

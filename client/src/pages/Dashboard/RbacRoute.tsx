@@ -2,7 +2,7 @@ import { roles } from '@/config/rbacConfig'
 import { usePermission } from '@/hooks/usePermission'
 import { useAppSelector } from '@/redux/store'
 import { selectCurrentUser } from '@/redux/userSlice'
-import { IRole } from '@/types/IRole'
+import { IRole } from '@/types/role'
 import { Navigate, Outlet } from 'react-router-dom'
 
 const RbacRoute = ({

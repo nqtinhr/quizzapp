@@ -1,6 +1,6 @@
 import { logoutUserAPI, refreshTokenAPI } from '@/redux/authSlice'
 import { AppDispatch, RootState } from '@/redux/store'
-import { ITokenPayload } from '@/types/IAuth'
+import { ITokenPayload } from '@/types/auth'
 import { interceptorLoadingElements } from '@/utils/formatters'
 import { Store } from '@reduxjs/toolkit'
 import axios, { AxiosResponse, InternalAxiosRequestConfig } from 'axios'

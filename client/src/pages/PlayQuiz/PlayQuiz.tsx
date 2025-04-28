@@ -4,7 +4,7 @@ import PlayQuizQuestions from '@/components/PlayQuizQuestions/PlayQuizQuestions'
 import PlayQuizResult from '@/components/PlayQuizResult/PlayQuizResult'
 import { Quiz } from '@/models/Quiz'
 import { QuizPlay } from '@/models/QuizPlay'
-import { IQuiz } from '@/types/IQuiz'
+import { IQuiz } from '@/types/quiz'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 

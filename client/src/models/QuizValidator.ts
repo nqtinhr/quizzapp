@@ -1,7 +1,7 @@
-import { MANDATORY, AN_OPTION_MUST_BE_SELECTED } from '@/constants/common'
-import { Quiz } from '../models/Quiz'
+import { AN_OPTION_MUST_BE_SELECTED, MANDATORY } from '@/constants/common'
+import { IQuiz } from '@/types/quiz'
 
-export const validate = (quiz: Quiz): QuizErrors => {
+export const validate = (quiz: IQuiz): QuizErrors => {
   const errors = new QuizErrors()
   if (!quiz.title) errors.title = MANDATORY
   if (!quiz.description) errors.description = MANDATORY
@@ -28,7 +28,11 @@ export class QuizErrors {
   questions: QuizQuestionErrors[] = [new QuizQuestionErrors()]
 
   isNotEmpty = () =>
-    this.title || this.description || this.tags || this.thumbnail || this.questions.filter((q) => q.isNotEmpty()).length > 0
+    this.title ||
+    this.description ||
+    this.tags ||
+    this.thumbnail ||
+    this.questions.filter((q) => q.isNotEmpty()).length > 0
 }
 
 export class QuizQuestionErrors {

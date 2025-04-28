@@ -21,10 +21,10 @@ export class ProfileResDto {
 
 export class GetAllUsersResDto {
   data: ProfileResDto[]
-  meta: PaginationDto
+  pagination: PaginationDto
 
-  constructor(data: ProfileResDto[], meta: PaginationDto) {
+  constructor(data: ProfileResDto[], pagination: PaginationDto) {
     this.data = data.map((item) => new ProfileResDto(item))
-    this.meta = meta
+    this.pagination = pagination
   }
 }

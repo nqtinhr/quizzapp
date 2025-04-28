@@ -18,7 +18,7 @@ import PlayQuiz from './pages/PlayQuiz/PlayQuiz'
 import { selectAccessToken } from './redux/authSlice'
 import { useAppDispatch, useAppSelector } from './redux/store'
 import { profileAPI, selectCurrentUser } from './redux/userSlice'
-import { IUser } from './types/IUser'
+import { IUser } from './types/user'
 
 const ProtectedRoute = ({ user }: { user: IUser | null }) => {
   if (!user) return <Navigate to='/login' replace={true} />
@@ -33,7 +33,6 @@ const UnauthorizedRoute = ({ user }: { user: IUser | null }) => {
 function App() {
   const dispatch = useAppDispatch()
   const currentUser = useAppSelector(selectCurrentUser)
-  console.log("🚀 ~ App ~ currentUser:", currentUser)
   const accessToken = useAppSelector(selectAccessToken)
   const calledProfileRef = useRef(false)
 

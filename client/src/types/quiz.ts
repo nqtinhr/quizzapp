@@ -5,12 +5,13 @@ export interface IQuizQuestion {
 }
 
 export interface IQuiz {
-  id: string
+  id?: string
   title: string
   description: string
   tags: string[]
   thumbnail: string
   questions: IQuizQuestion[]
+  plays?: IQuizPlay[]
 }
 
 export interface IQuizPlay {

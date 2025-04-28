@@ -1,22 +1,26 @@
 import PageTitle from '@/components/PageTitle/PageTitle'
 import { MANAGE_USERS_PAGE_TITLE, USER_EMAIL, USER_NAME, USER_PROVIDER } from '@/constants/common'
 import { User } from '@/models/User'
-import { useState } from 'react'
+import { useAppDispatch, useAppSelector } from '@/redux/store'
+import { getUserListAPI } from '@/redux/userSlice'
+import { useEffect } from 'react'
 import Table from 'react-table-lite'
 import styles from './ManageUsers.module.css'
 
 const ManageUsers = () => {
-  const [users, setUsers] = useState<User[]>([])
+  const dispatch = useAppDispatch()
+  const { userList, pagination } = useAppSelector((state) => state.user)
 
-  // useEffect(() => {
-  //   HttpClient.get<User[]>('/users').then((res) => setUsers(res.data))
-  // }, [])
+  useEffect(() => {
+    dispatch(getUserListAPI({ params: { page: pagination.page, limit: pagination.limit } }))
+  }, [dispatch, pagination.page, pagination.limit])
+  console.log("🚀 ~ ManageUsers ~ userList:", userList)
 
   return (
     <>
       <PageTitle value={MANAGE_USERS_PAGE_TITLE} />
       <Table
-        data={users}
+        data={userList}
         headers={['name', 'provider', 'email']}
         customHeaders={{ name: USER_NAME, provider: USER_PROVIDER, email: USER_EMAIL }}
         searchBy={['name', 'provider', 'email']}

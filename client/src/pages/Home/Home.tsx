@@ -11,11 +11,10 @@ import styles from './Home.module.css'
 const Home = () => {
   const dispatch = useAppDispatch()
   const { quizzes, loading, pagination } = useAppSelector((state) => state.quiz)
-  const params = { page: pagination.page, limit: pagination.limit }
 
   useEffect(() => {
-    dispatch(quizListAPI({params }))
-  }, [dispatch])
+    dispatch(quizListAPI({ params: { page: pagination.page, limit: pagination.limit } }))
+  }, [dispatch, pagination.page, pagination.limit])
 
   return (
     <>

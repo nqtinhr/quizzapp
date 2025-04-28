@@ -6,28 +6,39 @@ import Input from '../Input/Input'
 import QuizTagsInput from '../QuizTagsInput/QuizTagsInput'
 import QuizQuestionInput from '../QuizQuestionInput/QuizQuestionInput'
 import Label from '../Label/Label'
-import { ADD, MANDATORY, QUIZ_DESCRIPTION, QUIZ_QUESTIONS, QUIZ_TAGS, QUIZ_THUMBNAIL_URL, QUIZ_TITLE } from '@/constants/common'
+import {
+  ADD,
+  MANDATORY,
+  QUIZ_DESCRIPTION,
+  QUIZ_QUESTIONS,
+  QUIZ_TAGS,
+  QUIZ_THUMBNAIL_URL,
+  QUIZ_TITLE
+} from '@/constants/common'
 import SubmitButton from '../Button/SubmitButton'
 import { Quiz } from '@/models/Quiz'
 import { QuizErrors, QuizQuestionErrors, validate } from '@/models/QuizValidator'
 import { QuizQuestion } from '@/models/QuizQuestion'
+import quizApi from '@/api/quizApi'
+import { IQuiz } from '@/types/quiz'
+import { toast } from 'react-toastify'
 
 type QuizFormProps = {
   id?: string
-  onSubmit: (quiz: Quiz) => void
+  onSubmit: (quiz: IQuiz) => void
 }
 
 const QuizForm = ({ id, onSubmit }: QuizFormProps) => {
-  const [quiz, setQuiz] = useState<Quiz>(new Quiz())
+  const [quiz, setQuiz] = useState<IQuiz>(new Quiz())
   const [quizErrors, setQuizErrors] = useState(new QuizErrors())
 
   useEffect(() => {
     if (!id) return
-    // HttpClient.get<Quiz>(`/quizzes/${id}`).then((res) => {
-    //   setQuiz(res.data)
-    //   setQuizErrors({ ...quizErrors, questions: res.data.questions.map((_) => new QuizQuestionErrors()) })
-    // })
-  }, [])
+    ;(async () => {
+      const result = await quizApi.getQuiz(id!)
+      setQuiz(result.data)
+    })()
+  }, [id])
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
@@ -57,7 +68,7 @@ const QuizForm = ({ id, onSubmit }: QuizFormProps) => {
 
   const handleQuestionRemove = (index: number) => {
     if (quiz.questions.length === 1) {
-      // ToastService.error('Un quiz doit contenir au moins une question')
+      toast.error('A quiz must contain at least one question')
       return
     }
     const questions = quiz.questions
@@ -70,13 +81,14 @@ const QuizForm = ({ id, onSubmit }: QuizFormProps) => {
   }
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault() // Lorsqu'un formulaire est soumis, le comportement par défaut du navigateur est de recharger la page
+    event.preventDefault()
     const errors = validate(quiz)
     if (errors.isNotEmpty()) {
       setQuizErrors(errors)
-      // ToastService.error('Quiz Invalid')
+      toast.error('Quiz Invalid')
       return
     }
+    delete quiz.plays
     onSubmit(quiz)
   }
 
@@ -115,7 +127,7 @@ const QuizForm = ({ id, onSubmit }: QuizFormProps) => {
           key={index}
           value={question}
           index={index}
-          errors={quizErrors.questions[index]}
+          errors={quizErrors.questions[index] ?? new QuizQuestionErrors()}
           onRemove={handleQuestionRemove}
           onChange={handleQuestionChange}
         />

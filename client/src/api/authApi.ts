@@ -1,4 +1,4 @@
-import { ILogin, IRefreshToken, IRegister } from '@/types/IAuth'
+import { ILogin, IRefreshToken, IRegister } from '@/types/auth'
 import axiosInstance from './axiosIntance'
 
 const authApi = {

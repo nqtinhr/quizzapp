@@ -1,8 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
-import { Quiz } from '@prisma/client'
 import { PaginationDto, PaginationQueryDto } from 'src/shared/models/paging.model'
 import { PrismaService } from 'src/shared/services/prisma.service'
-import { CreateQuizDto, PlayQuizResDto, QuizQuestionDto, UpdateQuizDto } from './quiz.dto'
+import { CreateQuizDto, PlayQuizResDto, QuizQuestionDto, UpdateQuizDto, UpdateQuizQuestionDto } from './quiz.dto'
 
 @Injectable()
 export class QuizService {
@@ -78,7 +77,6 @@ export class QuizService {
     return quizWithQuestions
   }
 
-  // Phương thức để tạo câu hỏi cho Quiz
   private async createQuestions(quizId: string, questions: QuizQuestionDto[]) {
     const questionData = questions.map((q) => ({
       quizId,
@@ -92,43 +90,74 @@ export class QuizService {
     })
   }
 
-  async updateQuiz(id: string, data: UpdateQuizDto): Promise<Quiz> {
-    // Xóa toàn bộ câu hỏi cũ nếu có danh sách câu hỏi mới
-    if (data.questions) {
-      await this.prismaService.quizQuestion.deleteMany({
-        where: { quizId: id }
-      })
-
-      // Lọc bỏ câu hỏi không hợp lệ (undefined/null)
-      const validQuestions = data.questions
-        .filter((q) => q.question && q.answerIndex !== undefined)
-        .map((q) => ({
-          quizId: id,
-          question: q.question!,
-          options: JSON.stringify(q.options || []),
-          answerIndex: q.answerIndex!
-        }))
-
-      // Chỉ thêm câu hỏi nếu danh sách hợp lệ không rỗng
-      if (validQuestions.length > 0) {
-        await this.prismaService.quizQuestion.createMany({
-          data: validQuestions
-        })
-      }
+  async updateQuiz(id: string, quizData: UpdateQuizDto): Promise<any> {
+    const { title, description, tags, thumbnail, questions } = quizData;
+  
+    // Step 1: Tìm quiz
+    const existingQuiz = await this.prismaService.quiz.findUnique({
+      where: { id }
+    });
+  
+    if (!existingQuiz) {
+      throw new Error('Quiz not found');
     }
-
-    // Cập nhật thông tin quiz
-    return this.prismaService.quiz.update({
+  
+    // Step 2: Update the quiz info
+    const updatedQuiz = await this.prismaService.quiz.update({
       where: { id },
       data: {
-        title: data.title,
-        description: data.description,
-        tags: data.tags,
-        thumbnail: data.thumbnail
-      },
-      include: { questions: true }
-    })
+        title: title ?? existingQuiz.title,
+        description: description ?? existingQuiz.description,
+        tags: Array.isArray(tags) ? JSON.stringify(tags) : tags,
+        thumbnail: thumbnail ?? existingQuiz.thumbnail
+      }
+    });
+  
+    // Step 3: Cập nhật questions nếu được cung cấp
+    if (questions) {
+      await this.updateQuestions(id, questions);
+    }
+  
+    const quizWithQuestions = {
+      ...updatedQuiz,
+      questions: (questions ?? []).map(q => ({
+        question: q.question,
+        options: q.options,
+        answerIndex: q.answerIndex
+      }))
+    };
+  
+    return quizWithQuestions;
+  }  
+  
+  private async updateQuestions(quizId: string, questions: UpdateQuizQuestionDto[]) {
+    const questionPromises = questions.map((q) => {
+      const data = {
+        quizId,
+        question: q.question ?? '', 
+        options: q.options ? JSON.stringify(q.options) : '[]',
+        answerIndex: q.answerIndex ?? 0
+      };
+  
+      if (q.id) {
+        return this.prismaService.quizQuestion.update({
+          where: { id: q.id },
+          data
+        });
+      } else {
+        return this.prismaService.quizQuestion.create({
+          data: {
+            ...data,
+            quizId 
+          }
+        });
+      }
+    });
+  
+    await Promise.all(questionPromises);
   }
+  
+  
 
   async deleteQuiz(id: string): Promise<boolean> {
     const quiz = await this.prismaService.quiz.findUnique({
