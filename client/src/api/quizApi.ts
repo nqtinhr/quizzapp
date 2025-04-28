@@ -4,25 +4,28 @@ import axiosInstance from './axiosIntance'
 
 const quizApi = {
   getQuizList(params?: IPagination) {
-    return axiosInstance.get('/quizes', { params })
+    return axiosInstance.get('/quizzes', { params })
   },
   getQuiz(id: string) {
-    return axiosInstance.get(`/quizes/${id}`)
+    return axiosInstance.get(`/quizzes/${id}`)
   },
   createQuiz(quiz: IQuiz) {
-    return axiosInstance.post('/quizes', quiz)
+    return axiosInstance.post('/quizzes', quiz)
   },
   updateQuiz(id: string, quiz: IQuiz) {
-    return axiosInstance.patch(`/quizes/${id}`, quiz)
+    return axiosInstance.patch(`/quizzes/${id}`, quiz)
   },
   deleteQuiz(id: string) {
-    return axiosInstance.delete(`/quizes/${id}`)
+    return axiosInstance.delete(`/quizzes/${id}`)
   },
-  playQuiz(id: string) {
-    return axiosInstance.post(`/quizes/${id}/plays`)
+  playQuiz(id: string, correctQuestionsNumber: number) {
+    return axiosInstance.post(`/quizzes/${id}/plays`, { correctQuestionsNumber })
   },
-  historyQuiz() {
-    return axiosInstance.get('/quizzeshistory/plays')
+  historyQuizPlays(params?: IPagination) {
+    return axiosInstance.get('/quizzes/history/plays', { params })
+  },
+  historyAllQuizPlays(params?: IPagination) {
+    return axiosInstance.get('/quizzes/history/all', { params })
   }
 }
 

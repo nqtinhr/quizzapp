@@ -1,11 +1,4 @@
-import styles from './QuizForm.module.css'
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
-import { AiOutlinePlus } from 'react-icons/ai'
-import { Tooltip } from 'react-tooltip'
-import Input from '../Input/Input'
-import QuizTagsInput from '../QuizTagsInput/QuizTagsInput'
-import QuizQuestionInput from '../QuizQuestionInput/QuizQuestionInput'
-import Label from '../Label/Label'
+import quizApi from '@/api/quizApi'
 import {
   ADD,
   MANDATORY,
@@ -15,13 +8,20 @@ import {
   QUIZ_THUMBNAIL_URL,
   QUIZ_TITLE
 } from '@/constants/common'
-import SubmitButton from '../Button/SubmitButton'
 import { Quiz } from '@/models/Quiz'
-import { QuizErrors, QuizQuestionErrors, validate } from '@/models/QuizValidator'
 import { QuizQuestion } from '@/models/QuizQuestion'
-import quizApi from '@/api/quizApi'
-import { IQuiz } from '@/types/quiz'
+import { QuizErrors, QuizQuestionErrors, validate } from '@/models/QuizValidator'
+import { IQuiz, IQuizQuestion } from '@/types/quiz'
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
+import { AiOutlinePlus } from 'react-icons/ai'
 import { toast } from 'react-toastify'
+import { Tooltip } from 'react-tooltip'
+import SubmitButton from '../Button/SubmitButton'
+import Input from '../Input/Input'
+import Label from '../Label/Label'
+import QuizQuestionInput from '../QuizQuestionInput/QuizQuestionInput'
+import QuizTagsInput from '../QuizTagsInput/QuizTagsInput'
+import styles from './QuizForm.module.css'
 
 type QuizFormProps = {
   id?: string
@@ -51,7 +51,7 @@ const QuizForm = ({ id, onSubmit }: QuizFormProps) => {
     setQuizErrors({ ...quizErrors, tags: tags.length > 0 ? '' : MANDATORY })
   }
 
-  const handleQuestionChange = (question: QuizQuestion, index: number) => {
+  const handleQuestionChange = (question: IQuizQuestion, index: number) => {
     const questions = quiz.questions
     questions.splice(index, 1, question)
     setQuiz({ ...quiz, questions })

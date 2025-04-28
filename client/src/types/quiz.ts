@@ -20,4 +20,14 @@ export interface IQuizPlay {
   playedAt: Date
   questionsNumber: number
   correctQuestionsNumber: number
+  quiz?: {
+    id: string
+    title: string
+  }
+  user?: {
+    id: string
+    name: string
+    email: string
+    picture: string
+  }
 }

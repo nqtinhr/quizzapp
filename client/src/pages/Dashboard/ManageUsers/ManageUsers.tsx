@@ -1,11 +1,11 @@
 import PageTitle from '@/components/PageTitle/PageTitle'
 import { MANAGE_USERS_PAGE_TITLE, USER_EMAIL, USER_NAME, USER_PROVIDER } from '@/constants/common'
-import { User } from '@/models/User'
 import { useAppDispatch, useAppSelector } from '@/redux/store'
 import { getUserListAPI } from '@/redux/userSlice'
 import { useEffect } from 'react'
 import Table from 'react-table-lite'
 import styles from './ManageUsers.module.css'
+import { IUser } from '@/types/user'
 
 const ManageUsers = () => {
   const dispatch = useAppDispatch()
@@ -14,7 +14,6 @@ const ManageUsers = () => {
   useEffect(() => {
     dispatch(getUserListAPI({ params: { page: pagination.page, limit: pagination.limit } }))
   }, [dispatch, pagination.page, pagination.limit])
-  console.log("🚀 ~ ManageUsers ~ userList:", userList)
 
   return (
     <>
@@ -26,13 +25,15 @@ const ManageUsers = () => {
         searchBy={['name', 'provider', 'email']}
         searchable={true}
         customRenderCell={{
-          name: (user: User) => (
+          name: (user: IUser) => (
             <span className={styles.name}>
               <img src={user.picture} alt='User' />
               {user.name}
             </span>
           ),
-          provider: (user: User) => <img className={styles.provider} src={user.picture} alt='Provider' />
+          provider: (user: IUser) => (
+            <img src={user.picture} alt='avatar' width={40} height={40} style={{ borderRadius: '50%' }} />
+          )
         }}
       />
     </>

@@ -8,10 +8,18 @@ import { ActiveUser } from 'src/shared/decorators/active-user.decorator'
 import { Auth } from 'src/shared/decorators/auth.decorator'
 import { Roles } from 'src/shared/decorators/roles.decorator'
 import { PaginationDto, PaginationQueryDto } from 'src/shared/models/paging.model'
-import { CreateQuizDto, GetAllQuizzesResDto, GetQuizItemResDto, PlayQuizDto, PlayQuizResDto, UpdateQuizDto } from './quiz.dto'
+import {
+  CreateQuizDto,
+  GetAllPlayQuizzesResDto,
+  GetAllQuizzesResDto,
+  GetQuizItemResDto,
+  PlayQuizDto,
+  PlayQuizResDto,
+  UpdateQuizDto
+} from './quiz.dto'
 import { QuizService } from './quiz.service'
 
-@Controller('quizes')
+@Controller('quizzes')
 export class QuizController {
   constructor(private readonly quizService: QuizService) {}
 
@@ -53,20 +61,20 @@ export class QuizController {
     return new PlayQuizResDto(await this.quizService.playQuiz(id, userId, body.correctQuestionsNumber))
   }
 
+  @Roles(UserRole.MODERATOR, UserRole.ADMIN)
   @Auth([AuthType.Bearer, AuthType.APIKey], { condition: ConditionGuard.Or })
-  @Get('history/plays')
-  async getQuizPlays(@ActiveUser('userId') userId: string) {
-    return await this.quizService.getQuizPlays(userId)
+  @Get('history/all')
+  async historyAllQuizPlays(@Query() query: PaginationQueryDto) {
+    const { data, pagination } = await this.quizService.historyAllQuizPlays(query)
+    return new GetAllPlayQuizzesResDto(data, new PaginationDto(pagination))
   }
 
-  // @Roles(UserRole.MODERATOR, UserRole.ADMIN)
-  // @Auth([AuthType.Bearer, AuthType.APIKey], { condition: ConditionGuard.Or })
-  // @Get('export')
-  // async exportQuizzes(@Res() res: Response) {
-  //   const quizzes = await this.quizService.getQuizes()
-  //   res.setHeader('Content-Disposition', 'attachment; filename=quizzes.json')
-  //   res.json(quizzes)
-  // }
+  @Auth([AuthType.Bearer, AuthType.APIKey], { condition: ConditionGuard.Or })
+  @Get('history/plays')
+  async historyQuizPlays(@ActiveUser('userId') userId: string, @Query() query: PaginationQueryDto) {
+    const { data, pagination } = await this.quizService.historyQuizPlays(userId, query)
+    return new GetAllPlayQuizzesResDto(data, new PaginationDto(pagination))
+  }
 
   @Roles(UserRole.MODERATOR, UserRole.ADMIN)
   @Auth([AuthType.Bearer, AuthType.APIKey], { condition: ConditionGuard.Or })
@@ -81,4 +89,13 @@ export class QuizController {
     // 2. Thêm danh sách quiz mới vào database
     // await this.quizService.createMultiple(data)
   }
+
+  // @Roles(UserRole.MODERATOR, UserRole.ADMIN)
+  // @Auth([AuthType.Bearer, AuthType.APIKey], { condition: ConditionGuard.Or })
+  // @Get('export')
+  // async exportQuizzes(@Res() res: Response) {
+  //   const quizzes = await this.quizService.getQuizes()
+  //   res.setHeader('Content-Disposition', 'attachment; filename=quizzes.json')
+  //   res.json(quizzes)
+  // }
 }

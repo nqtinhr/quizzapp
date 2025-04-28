@@ -1,7 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { PaginationDto, PaginationQueryDto } from 'src/shared/models/paging.model'
 import { PrismaService } from 'src/shared/services/prisma.service'
-import { CreateQuizDto, PlayQuizResDto, QuizQuestionDto, UpdateQuizDto, UpdateQuizQuestionDto } from './quiz.dto'
+import {
+  CreateQuizDto,
+  GetAllPlayQuizzesResDto,
+  PlayQuizResDto,
+  QuizQuestionDto,
+  UpdateQuizDto,
+  UpdateQuizQuestionDto
+} from './quiz.dto'
 
 @Injectable()
 export class QuizService {
@@ -20,7 +27,6 @@ export class QuizService {
         skip: (page - 1) * limit,
         take: limit,
         include: { questions: true, plays: true }
-        // orderBy: { createdAt: 'desc' }
       }),
       this.prismaService.quiz.count({ where })
     ])
@@ -91,17 +97,17 @@ export class QuizService {
   }
 
   async updateQuiz(id: string, quizData: UpdateQuizDto): Promise<any> {
-    const { title, description, tags, thumbnail, questions } = quizData;
-  
+    const { title, description, tags, thumbnail, questions } = quizData
+
     // Step 1: Tìm quiz
     const existingQuiz = await this.prismaService.quiz.findUnique({
       where: { id }
-    });
-  
+    })
+
     if (!existingQuiz) {
-      throw new Error('Quiz not found');
+      throw new Error('Quiz not found')
     }
-  
+
     // Step 2: Update the quiz info
     const updatedQuiz = await this.prismaService.quiz.update({
       where: { id },
@@ -111,53 +117,51 @@ export class QuizService {
         tags: Array.isArray(tags) ? JSON.stringify(tags) : tags,
         thumbnail: thumbnail ?? existingQuiz.thumbnail
       }
-    });
-  
+    })
+
     // Step 3: Cập nhật questions nếu được cung cấp
     if (questions) {
-      await this.updateQuestions(id, questions);
+      await this.updateQuestions(id, questions)
     }
-  
+
     const quizWithQuestions = {
       ...updatedQuiz,
-      questions: (questions ?? []).map(q => ({
+      questions: (questions ?? []).map((q) => ({
         question: q.question,
         options: q.options,
         answerIndex: q.answerIndex
       }))
-    };
-  
-    return quizWithQuestions;
-  }  
-  
+    }
+
+    return quizWithQuestions
+  }
+
   private async updateQuestions(quizId: string, questions: UpdateQuizQuestionDto[]) {
     const questionPromises = questions.map((q) => {
       const data = {
         quizId,
-        question: q.question ?? '', 
+        question: q.question ?? '',
         options: q.options ? JSON.stringify(q.options) : '[]',
         answerIndex: q.answerIndex ?? 0
-      };
-  
+      }
+
       if (q.id) {
         return this.prismaService.quizQuestion.update({
           where: { id: q.id },
           data
-        });
+        })
       } else {
         return this.prismaService.quizQuestion.create({
           data: {
             ...data,
-            quizId 
+            quizId
           }
-        });
+        })
       }
-    });
-  
-    await Promise.all(questionPromises);
+    })
+
+    await Promise.all(questionPromises)
   }
-  
-  
 
   async deleteQuiz(id: string): Promise<boolean> {
     const quiz = await this.prismaService.quiz.findUnique({
@@ -207,32 +211,69 @@ export class QuizService {
     return new PlayQuizResDto(quizPlay)
   }
 
-  async getQuizPlays(userId): Promise<PlayQuizResDto[]> {
-    const quizPlays = await this.prismaService.quizPlay.findMany({
-      where: { userId },
-      include: {
-        quiz: {
-          select: {
-            id: true,
-            title: true
-          }
-        },
-        user: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-            picture: true
-          }
-        }
-      }
-    })
-    return quizPlays.map((qp) => new PlayQuizResDto(qp))
+  async historyQuizPlays(userId: string, query: PaginationQueryDto): Promise<GetAllPlayQuizzesResDto> {
+    return this.getQuizPlaysBase(query, userId)
   }
 
-  // Trả về các câu hỏi của quiz
-  // const quizQuestions = await this.prismaService.quizQuestion.findMany({
-  // async createMultiple(data: CreateQuizDto[]): Promise<void> {
-  //   await this.prismaService.quiz.createMany({ data })
-  // }
+  async historyAllQuizPlays(query: PaginationQueryDto): Promise<GetAllPlayQuizzesResDto> {
+    return this.getQuizPlaysBase(query)
+  }
+
+  private async getQuizPlaysBase(
+    query: PaginationQueryDto,
+    userId?: string
+  ): Promise<{ data: any[]; pagination: PaginationDto }> {
+    const page = Number(query.page) || 1
+    const limit = Number(query.limit) || 10
+    const search = query.search?.toLowerCase()
+
+    const where: any = {}
+    if (userId) {
+      where.userId = userId
+    }
+    if (search) {
+      where.quiz = {
+        title: {
+          contains: search,
+        }
+      }
+    }
+
+    const [quizPlays, totalRows] = await this.prismaService.$transaction([
+      this.prismaService.quizPlay.findMany({
+        where,
+        skip: (page - 1) * limit,
+        take: limit,
+        orderBy: {
+          playedAt: 'desc'
+        },
+        include: {
+          quiz: {
+            select: {
+              id: true,
+              title: true
+            }
+          },
+          user: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              picture: true,
+            }
+          }
+        }
+      }),
+      this.prismaService.quizPlay.count({ where })
+    ])
+
+    return {
+      data: quizPlays,
+      pagination: new PaginationDto({
+        page,
+        limit,
+        totalRows
+      })
+    }
+  }
 }

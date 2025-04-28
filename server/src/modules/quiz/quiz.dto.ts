@@ -114,6 +114,18 @@ export class PlayQuizDto {
   correctQuestionsNumber: number
 }
 
+export class GetAllPlayQuizzesResDto {
+  @Type(() => PlayQuizResDto)
+  data: PlayQuizResDto[]
+
+  pagination: PaginationDto
+
+  constructor(data: any[], pagination: PaginationDto) {
+    this.data = data.map((item) => new PlayQuizResDto(item))
+    this.pagination = pagination
+  }
+}
+
 export class PlayQuizResDto extends QuizPlayModel {
   constructor(partial: Partial<PlayQuizResDto>) {
     super(partial)

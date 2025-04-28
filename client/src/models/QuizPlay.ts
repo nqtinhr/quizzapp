@@ -1,3 +1,5 @@
+import { IQuizPlay } from '@/types/quiz'
+
 export class QuizPlay {
   quizId = ''
   quizTitle = ''
@@ -5,7 +7,7 @@ export class QuizPlay {
   questionsNumber = 0
   correctQuestionsNumber = 0
 
-  static getPercentage = (quizPlay: QuizPlay) => {
+  static getPercentage = (quizPlay: IQuizPlay) => {
     return `${Math.ceil((quizPlay.correctQuestionsNumber * 100) / quizPlay.questionsNumber)} %`
   }
 }
