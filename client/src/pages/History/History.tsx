@@ -52,7 +52,7 @@ const History = () => {
           ),
           playedAt: (quizPlay: IQuizPlay) => new Date(quizPlay.playedAt).toLocaleString(),
           pourcentage: (quizPlay: IQuizPlay) =>
-            `${Math.ceil((quizPlay.correctQuestionsNumber * 100) / quizPlay.questionsNumber)}%`,
+            `${quizPlay.quiz?.questions ? Math.ceil((quizPlay.correctQuestionsNumber * 100) / quizPlay.quiz.questions.length) : 0}%`,
           ...(isAdminOrModerator && {
             userEmail: (quizPlay: IQuizPlay) => quizPlay.user?.email || '',
             userPicture: (quizPlay: IQuizPlay) =>

@@ -16,7 +16,7 @@ export class QuizService {
 
   async getQuizes(query: PaginationQueryDto) {
     const page = Number(query.page) || 1
-    const limit = Number(query.limit) || 10
+    const limit = Number(query.limit) || 9
     const search = query.search?.toLowerCase()
 
     const where = search ? { title: { contains: search } } : {}
@@ -137,6 +137,19 @@ export class QuizService {
   }
 
   private async updateQuestions(quizId: string, questions: UpdateQuizQuestionDto[]) {
+    const questionIds = questions.filter((q): q is { id: string } => !!q.id).map((q) => q.id)
+
+    // Step 1: Xóa các câu hỏi không còn tồn tại
+    await this.prismaService.quizQuestion.deleteMany({
+      where: {
+        quizId,
+        id: {
+          notIn: questionIds.length > 0 ? questionIds : ['']
+        }
+      }
+    })
+
+    // Step 2: Update hoặc Create tất cả questions mới bằng Promise.all
     const questionPromises = questions.map((q) => {
       const data = {
         quizId,
@@ -152,10 +165,7 @@ export class QuizService {
         })
       } else {
         return this.prismaService.quizQuestion.create({
-          data: {
-            ...data,
-            quizId
-          }
+          data
         })
       }
     })
@@ -224,7 +234,7 @@ export class QuizService {
     userId?: string
   ): Promise<{ data: any[]; pagination: PaginationDto }> {
     const page = Number(query.page) || 1
-    const limit = Number(query.limit) || 10
+    const limit = Number(query.limit) || 9
     const search = query.search?.toLowerCase()
 
     const where: any = {}
@@ -234,7 +244,7 @@ export class QuizService {
     if (search) {
       where.quiz = {
         title: {
-          contains: search,
+          contains: search
         }
       }
     }
@@ -251,7 +261,8 @@ export class QuizService {
           quiz: {
             select: {
               id: true,
-              title: true
+              title: true,
+              questions: true
             }
           },
           user: {
@@ -259,7 +270,7 @@ export class QuizService {
               id: true,
               name: true,
               email: true,
-              picture: true,
+              picture: true
             }
           }
         }

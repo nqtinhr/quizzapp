@@ -14,7 +14,7 @@ export class UserService {
 
   async getAllUsers(query: PaginationQueryDto) {
     const page = Number(query.page) || 1
-    const limit = Number(query.limit) || 10
+    const limit = Number(query.limit) || 9
     const search = query.search?.toLowerCase()
 
     const where = search

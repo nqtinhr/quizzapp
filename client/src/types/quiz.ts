@@ -18,11 +18,11 @@ export interface IQuizPlay {
   quizId: string
   quizTitle: string
   playedAt: Date
-  questionsNumber: number
   correctQuestionsNumber: number
   quiz?: {
     id: string
     title: string
+    questions: string[]
   }
   user?: {
     id: string
