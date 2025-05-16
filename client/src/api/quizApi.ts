@@ -26,6 +26,14 @@ const quizApi = {
   },
   historyAllQuizPlays(params?: IPagination) {
     return axiosInstance.get('/quizzes/history/all', { params })
+  },
+  importQuiz(file: File) {
+    const formData = new FormData()
+    formData.append('file', file)
+    return axiosInstance.post('/quizzes/import', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+  },
+  exportQuizzes() {
+    return axiosInstance.get('/quizzes/export')
   }
 }
 

@@ -287,4 +287,35 @@ export class QuizService {
       })
     }
   }
+
+  async importQuizzes(data: CreateQuizDto[]): Promise<number> {
+    const imported: CreateQuizDto[] = []
+
+    for (const quizDto of data) {
+      const quiz = await this.createQuiz(quizDto)
+      imported.push(quiz)
+    }
+
+    return imported.length
+  }
+
+  async exportQuizzes(): Promise<any[]> {
+    const quizzes = await this.prismaService.quiz.findMany({
+      include: {
+        questions: true
+      }
+    })
+
+    return quizzes.map((quiz) => ({
+      title: quiz.title,
+      description: quiz.description,
+      tags: JSON.parse(quiz.tags || '[]'),
+      thumbnail: quiz.thumbnail,
+      questions: quiz.questions.map((q) => ({
+        question: q.question,
+        options: JSON.parse(q.options),
+        answerIndex: q.answerIndex
+      }))
+    }))
+  }
 }

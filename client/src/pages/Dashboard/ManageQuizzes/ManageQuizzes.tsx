@@ -35,9 +35,11 @@ const ManageQuizzes = () => {
     dispatch(quizListAPI({ params: { page: pagination.page, limit: pagination.limit } }))
   }, [dispatch, pagination.page, pagination.limit])
 
-  const exportQuizzes = () => {
-    // HttpClient.export('/quizzes/export', 'quizzes.json')
-    console.log('export')
+  const exportQuizzes = async () => {
+    const result: any = await quizApi.exportQuizzes()
+    if (result.statusCode === 200) {
+      toast.success('Quizzes exported successfully')
+    }
   }
 
   const deleteQuiz = async (quiz: IQuiz) => {

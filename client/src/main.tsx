@@ -14,11 +14,11 @@ const persistor = persistStore(store)
 injectStore(store)
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
+  // <StrictMode>
     <Provider store={store}>
       <PersistGate persistor={persistor}>
         <App />
       </PersistGate>
     </Provider>
-  </StrictMode>
+  // </StrictMode>
 )

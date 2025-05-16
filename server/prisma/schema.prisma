@@ -1,5 +1,5 @@
 datasource db {
-  provider = "mysql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -14,40 +14,42 @@ enum UserRole {
 }
 
 model Quiz {
-  id          String         @id @default(uuid()) @db.Char(36)
-  title       String         @db.VarChar(255)
-  description String?        @db.Text
-  tags        String         @db.Text
-  thumbnail   String?        @db.VarChar(255)
+  id          String         @id @default(uuid())
+  title       String
+  description String?
+  tags        String
+  thumbnail   String?
   questions   QuizQuestion[]
   plays       QuizPlay[]
 }
 
 model QuizPlay {
-  id                      String   @id @default(uuid()) @db.Char(36)
-  userId                  String   @db.Char(36)
-  quizId                  String   @db.Char(36)
-  playedAt                DateTime @default(now())
-  correctQuestionsNumber  Int
-  user                    User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  quiz                    Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  id                     String   @id @default(uuid())
+  userId                 String
+  quizId                 String
+  playedAt               DateTime @default(now())
+  correctQuestionsNumber Int
+  user                   User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  quiz                   Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  // @@id([userId, quizId])
 }
 
 model QuizQuestion {
-  id          String @id @default(uuid()) @db.Char(36)
-  question    String @db.Text
-  options     String @db.Text
+  id          String @id @default(uuid())
+  question    String
+  options     String
   answerIndex Int
-  quizId      String @db.Char(36)
+  quizId      String
   quiz        Quiz   @relation(fields: [quizId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model User {
-  id        String         @id @default(uuid()) @db.Char(36)
-  email     String         @unique @db.VarChar(255)
-  name      String         @db.VarChar(100)
-  password  String         @db.VarChar(255)
-  picture   String         @default("") @db.VarChar(255)
+  id        String         @id @default(uuid())
+  email     String         @unique
+  name      String
+  password  String
+  picture   String         @default("")
   role      UserRole       @default(CLIENT)
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
@@ -56,8 +58,8 @@ model User {
 }
 
 model RefreshToken {
-  token     String   @id @db.VarChar(512)
-  userId    String   @db.Char(36)
+  token     String   @id @unique
+  userId    String
   expiresAt DateTime
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)

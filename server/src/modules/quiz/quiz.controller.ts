@@ -1,5 +1,10 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Res, UploadedFile, UseInterceptors } from '@nestjs/common'
+import { FileInterceptor } from '@nestjs/platform-express'
 import { UserRole } from '@prisma/client'
+import { Response } from 'express'
+import * as fs from 'fs'
+import { diskStorage } from 'multer'
+import { extname } from 'path'
 import { AuthType, ConditionGuard } from 'src/shared/constants/auth.constant'
 import { ActiveUser } from 'src/shared/decorators/active-user.decorator'
 import { Auth } from 'src/shared/decorators/auth.decorator'
@@ -73,24 +78,41 @@ export class QuizController {
     return new GetAllPlayQuizzesResDto(data, new PaginationDto(pagination))
   }
 
-  // @Roles(UserRole.MODERATOR, UserRole.ADMIN)
-  // @Auth([AuthType.Bearer, AuthType.APIKey], { condition: ConditionGuard.Or })
-  // @Post('import')
-  // @UseInterceptors(FileInterceptor('file'))
-  // async importQuizzes(@UploadedFile() file: File): Promise<void> {
-  //   const data: CreateQuizDto[] = JSON.parse(fs.readFileSync(file.path, 'utf8'))
-  //   await this.quizService.importQuizzes(data)
-  // }
-  
-  // @Roles(UserRole.MODERATOR, UserRole.ADMIN)
-  // @Auth([AuthType.Bearer, AuthType.APIKey], { condition: ConditionGuard.Or })
-  // @Get('export')
-  // async exportQuizzes(@Res() res: Response) {
-  //   const quizzes = await this.quizService.exportQuizzes()
-  
-  //   res.setHeader('Content-Type', 'application/json')
-  //   res.setHeader('Content-Disposition', 'attachment; filename=quizzes.json')
-  //   res.send(JSON.stringify(quizzes, null, 2))
-  // }
-  
+  @Roles(UserRole.MODERATOR, UserRole.ADMIN)
+  @Auth([AuthType.Bearer, AuthType.APIKey], { condition: ConditionGuard.Or })
+  @Post('import')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (req, file, cb) => {
+          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9)
+          cb(null, `${file.fieldname}-${uniqueSuffix}${extname(file.originalname)}`)
+        }
+      }),
+      fileFilter: (req, file, cb) => {
+        if (file.mimetype !== 'application/json') {
+          return cb(new Error('Only JSON files are allowed!'), false)
+        }
+        cb(null, true)
+      }
+    })
+  )
+  async importQuizzes(@UploadedFile() file: Express.Multer.File): Promise<number> {
+    const content = fs.readFileSync(file.path, 'utf8')
+    const data: CreateQuizDto[] = JSON.parse(content)
+    return await this.quizService.importQuizzes(data)
+  }
+
+  @Roles(UserRole.MODERATOR, UserRole.ADMIN)
+  @Auth([AuthType.Bearer, AuthType.APIKey], { condition: ConditionGuard.Or })
+  @Get('export')
+  async exportQuizzes(@Res() res: Response) {
+    const quizzes = await this.quizService.exportQuizzes()
+    console.log("🚀 ~ QuizController ~ exportQuizzes ~ quizzes:", quizzes)
+
+    res.setHeader('Content-Type', 'application/json')
+    res.setHeader('Content-Disposition', 'attachment; filename=quizzes.json')
+    res.send(JSON.stringify(quizzes, null, 2))
+  }
 }
