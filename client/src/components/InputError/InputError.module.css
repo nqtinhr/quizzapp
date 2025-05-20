@@ -1,0 +1,6 @@
+.container {
+    color: var(--red-color);
+    font-size: 1.1rem;
+    font-weight: 400;
+    height: 1.6rem;
+}

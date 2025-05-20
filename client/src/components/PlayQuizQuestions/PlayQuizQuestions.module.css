@@ -1,0 +1,114 @@
+.container {
+    position: relative;
+    margin-top: 5rem;
+    background-color: var(--white-color);
+    padding: 6rem 4rem;
+    padding-bottom: 12rem;
+    border-radius: 1.5rem;
+    box-shadow: 0rem 0rem 2rem 0 rgba(0, 0, 0, 0.05);
+}
+
+.questionIndex {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: -2rem;
+    background-color: var(--yellow-color);
+    padding: 1rem 4rem;
+    border-radius: 10rem;
+    color: var(--white-color);
+    font-size: 1.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    box-shadow: 0rem 0.2rem 1rem 0.5rem rgba(0, 0, 0, 0.05);
+}
+
+.container h2 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 2.2rem;
+    margin-bottom: 3rem;
+    text-align: center;
+    color: #495057;
+    font-weight: 800;
+}
+
+.options {
+    font-family: 'Roboto', sans-serif;
+    margin-top: 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    column-gap: 1rem;
+    row-gap: 1rem;
+}
+
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-top: 3rem;
+  max-width: 45rem;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.navigation button {
+  flex: 1;
+  padding: 1.75rem 2rem;
+  border-radius: 1rem;
+}
+
+.navigation button:hover {
+  transform: scale(1.05);
+}
+
+
+
+@media screen and (min-width: 768px) {
+    .options {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.option {
+    display: flex;
+    align-items: center;
+    column-gap: 2rem;
+    background-color: #e8eaf680;
+    border-radius: 0.5rem;
+    padding: 1rem 2rem;
+    cursor: pointer;
+    font-size: 1.7rem;
+    font-weight: 500;
+    color: #495057;
+    transition: background-color .1s ease;
+    cursor: not-allowed;
+}
+
+.option:hover {
+    background-color: #e8eaf6C0;
+    cursor: pointer;
+}
+
+.prefix {
+    width: 4rem;
+    height: 4rem;
+    background-color: var(--blue-color);
+    color: var(--white-color);
+    border-radius: 10rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    padding: .5rem;
+}
+
+.option.selected {
+    background-color: var(--blue-color);
+    color: var(--white-color);
+}
+
+.option.selected .prefix {
+    color: var(--blue-color);
+    background-color: var(--white-color);
+}

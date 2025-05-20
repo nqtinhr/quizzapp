@@ -1,0 +1,722 @@
+{
+	"info": {
+		"_postman_id": "3ab5d5b1-74f2-4c77-9624-a0a31f6544c8",
+		"name": "QuizzApp",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11430181"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"\", function () {\r",
+							"    pm.response.to.be.success\r",
+							"    const { accessToken, refreshToken } = pm.response.json().data\r",
+							"    pm.environment.set(\"accessToken\", accessToken)\r",
+							"    pm.environment.set(\"refreshToken\", refreshToken)\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"{{email}}\",\r\n    \"password\": \"{{password}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/auth/login",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"moderator\",\r\n    \"email\": \"moderator@gmail.com\",\r\n    \"password\": \"123123\",\r\n    \"comfirmPassword\": \"123123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/auth/register",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Refresh Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"\", function () {\r",
+							"    pm.response.to.be.success\r",
+							"    const { accessToken, refreshToken } = pm.response.json().data\r",
+							"    pm.environment.set(\"accessToken\", accessToken)\r",
+							"    pm.environment.set(\"refreshToken\", refreshToken)\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"refreshToken\": \"{{refreshToken}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/auth/refresh-token",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"auth",
+						"refresh-token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"\", function () {\r",
+							"    pm.response.to.be.success\r",
+							"    const { accessToken, refreshToken } = pm.response.json().data\r",
+							"    pm.environment.set(\"accessToken\", accessToken)\r",
+							"    pm.environment.set(\"refreshToken\", refreshToken)\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"refreshToken\": \"{{refreshToken}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/auth/logout",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"auth",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Profile",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "2000",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/users/profile",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"users",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All User",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "2000",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/users/",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"users",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Quiz",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "2000",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/quizzes",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"quizzes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Detail Quiz",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "2000",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/quizzes/cdb7e6c3-b452-4fca-950a-b93264bfe9b2",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"quizzes",
+						"cdb7e6c3-b452-4fca-950a-b93264bfe9b2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get History Quiz",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "2000",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/quizzes/history/plays",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"quizzes",
+						"history",
+						"plays"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All History Quiz",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "2000",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/quizzes/history/all",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"quizzes",
+						"history",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Play Quiz",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "2000",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"correctQuestionsNumber\": 100\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/quizzes/23adb5f3-58b7-483d-9323-c35863f8c79b/plays",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"quizzes",
+						"23adb5f3-58b7-483d-9323-c35863f8c79b",
+						"plays"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Quiz",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "2000",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "  {\r\n    \"title\": \"Docker\",\r\n    \"description\": \"Bài trắc nghiệm kiểm tra kiến thức về Docker cho lập trình viên và DevOps\",\r\n    \"tags\": [\"DevOps\", \"Container\"],\r\n    \"thumbnail\": \"https://res.cloudinary.com/tinhaws/image/upload/v1747493366/blog-list/docker.jpg\",\r\n    \"questions\": [\r\n      {\r\n        \"question\": \"Lệnh nào được dùng để xây dựng một Docker image từ Dockerfile?\",\r\n        \"options\": [\r\n          \"docker run\",\r\n          \"docker create\",\r\n          \"docker build\",\r\n          \"docker start\"\r\n        ],\r\n        \"answerIndex\": 2\r\n      },\r\n      {\r\n        \"question\": \"Tệp nào được Docker sử dụng để định nghĩa cách tạo ra image?\",\r\n        \"options\": [\r\n          \"Dockerfile\",\r\n          \"docker-compose.yml\",\r\n          \"build.yaml\",\r\n          \"image.json\"\r\n        ],\r\n        \"answerIndex\": 0\r\n      },\r\n      {\r\n        \"question\": \"Docker sử dụng công nghệ nào để cô lập container?\",\r\n        \"options\": [\r\n          \"Virtual Machines\",\r\n          \"Hyper-V\",\r\n          \"Namespaces và Cgroups\",\r\n          \"Kernel Modules\"\r\n        ],\r\n        \"answerIndex\": 2\r\n      },\r\n      {\r\n        \"question\": \"Lệnh nào dùng để gán tên (tag) cho một image đã tạo?\",\r\n        \"options\": [\r\n          \"docker tag\",\r\n          \"docker name\",\r\n          \"docker label\",\r\n          \"docker assign\"\r\n        ],\r\n        \"answerIndex\": 0\r\n      },\r\n      {\r\n        \"question\": \"Lệnh `docker volume` dùng để làm gì?\",\r\n        \"options\": [\r\n          \"Tạo mạng giữa các container\",\r\n          \"Tạo ổ đĩa lưu trữ ngoài\",\r\n          \"Gắn kết cổng mạng\",\r\n          \"Theo dõi log container\"\r\n        ],\r\n        \"answerIndex\": 1\r\n      },\r\n      {\r\n        \"question\": \"Điều gì xảy ra nếu bạn xóa một container nhưng không xóa volume được gắn kèm?\",\r\n        \"options\": [\r\n          \"Volume bị xóa cùng container\",\r\n          \"Volume vẫn còn trên hệ thống\",\r\n          \"Docker xóa tự động sau 24h\",\r\n          \"Volume sẽ bị lỗi\"\r\n        ],\r\n        \"answerIndex\": 1\r\n      },\r\n      {\r\n        \"question\": \"Lệnh `docker exec` có chức năng gì?\",\r\n        \"options\": [\r\n          \"Tạo container mới\",\r\n          \"Chạy lệnh bên trong container đang chạy\",\r\n          \"Khởi động container\",\r\n          \"Tạo image từ container\"\r\n        ],\r\n        \"answerIndex\": 1\r\n      },\r\n      {\r\n        \"question\": \"Tệp `docker-compose.yml` được dùng để làm gì?\",\r\n        \"options\": [\r\n          \"Tự động deploy image lên Docker Hub\",\r\n          \"Định nghĩa và quản lý nhiều container cùng lúc\",\r\n          \"Ghi log container\",\r\n          \"Chạy các command shell bên trong container\"\r\n        ],\r\n        \"answerIndex\": 1\r\n      },\r\n      {\r\n        \"question\": \"Lệnh `docker network create` dùng để?\",\r\n        \"options\": [\r\n          \"Tạo một ổ đĩa ảo\",\r\n          \"Tạo một vùng bộ nhớ cache\",\r\n          \"Tạo mạng tùy chỉnh cho container\",\r\n          \"Tạo file cấu hình mạng\"\r\n        ],\r\n        \"answerIndex\": 2\r\n      },\r\n      {\r\n        \"question\": \"Để cập nhật một container đang chạy, bạn cần thực hiện thao tác nào sau đây?\",\r\n        \"options\": [\r\n          \"Chạy lại container với image mới\",\r\n          \"Dùng lệnh docker update live\",\r\n          \"Chỉnh sửa trực tiếp container\",\r\n          \"Sửa image và chạy lệnh docker edit\"\r\n        ],\r\n        \"answerIndex\": 0\r\n      }\r\n    ]\r\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/quizzes",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"quizzes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Quiz",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "2000",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"JavaScript Basics\",\r\n    \"description\": \"A quiz to test your JavaScript knowledge\",\r\n    \"tags\": [\r\n        \"JavaScript\",\r\n        \"Programming\"\r\n    ],\r\n    \"thumbnail\": \"https://doidev.com/javascript-co-ban/featured-image.png\",\r\n    \"questions\": [\r\n        {\r\n            \"question\": \"What is the output of `console.log(typeof null)`?\",\r\n            \"options\": [\r\n                \"object\",\r\n                \"null\",\r\n                \"undefined\",\r\n                \"string\"\r\n            ],\r\n            \"answerIndex\": 0,\r\n            \"id\": \"6d382948-b78e-4dd1-97f9-dd3f8d4a242a\",\r\n            \"quizId\": \"4c5cb8ea-5847-41dc-86a8-1ec96385bddc\"\r\n        },\r\n        {\r\n            \"question\": \"Which keyword is used to declare a constant variable in JavaScript?\",\r\n            \"options\": [\r\n                \"let\",\r\n                \"var\",\r\n                \"const\",\r\n                \"static\"\r\n            ],\r\n            \"answerIndex\": 2,\r\n            \"id\": \"8a67c76f-b454-43fa-8c66-1aff8fd87c9a\",\r\n            \"quizId\": \"4c5cb8ea-5847-41dc-86a8-1ec96385bddc\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/quizzes/23adb5f3-58b7-483d-9323-c35863f8c79b",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"quizzes",
+						"23adb5f3-58b7-483d-9323-c35863f8c79b"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Quiz",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "2000",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/quizzes/cdb7e6c3-b452-4fca-950a-b93264bfe9b2",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"quizzes",
+						"cdb7e6c3-b452-4fca-950a-b93264bfe9b2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Import Quiz",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "2000",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/admin/OneDrive/Máy tính/quizzapp/quizzes.json"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{API_URL}}/quizzes/import",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"quizzes",
+						"import"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Export Quiz",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "2000",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/admin/OneDrive/Máy tính/quizzapp/quizzes.json"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{API_URL}}/quizzes/export/all",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"quizzes",
+						"export",
+						"all"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,16 @@
+.actions {
+    margin-top: 3rem;
+    display: flex;
+    justify-content: flex-end;
+    column-gap: 2rem;
+}
+
+.actions button {
+    padding: .8rem 3rem;
+}
+
+.actions .cancel {
+    background-color: transparent;
+    color: var(--yellow-color);
+    border: 0.2rem solid var(--yellow-color);
+}

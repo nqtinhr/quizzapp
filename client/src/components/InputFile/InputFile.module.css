@@ -1,0 +1,42 @@
+.container {
+    text-align: center;
+    padding: 6rem 2rem;
+    position: relative;
+    cursor: pointer;
+    border-radius: 0.2rem;
+    border: none;
+    outline: 0.1rem solid #EEE;
+    background-color: #FCFCFC;
+}
+
+.container.error {
+    outline-color: var(--red-color);
+}
+
+.container .icon {
+    font-size: 4rem;
+}
+
+.container h3 {
+    color: #454545;
+    font-size: 1.35rem;
+}
+
+.container p {
+    font-size: 1.5rem;
+    margin-top: 1rem;
+    color: #454545c1;
+}
+
+.container input {
+    display: block;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    cursor: pointer;
+}

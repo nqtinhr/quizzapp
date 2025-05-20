@@ -1,0 +1,23 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+}
+
+.container input {
+    padding: 1.2rem 1.6rem;
+    border: none;
+    outline: 0.1rem solid #EEE;
+    background-color: #FCFCFC;
+    border-radius: 0.3rem;
+    transition: outline-color .1s ease-in;
+}
+
+.container input:focus {
+    outline-color: var(--yellow-color);
+}
+
+.container.error input {
+    outline-color: var(--red-color);
+}

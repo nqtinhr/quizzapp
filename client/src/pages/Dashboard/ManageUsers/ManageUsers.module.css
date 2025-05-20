@@ -1,0 +1,35 @@
+.name {
+    display: flex;
+    align-items: center;
+}
+
+.name img {
+    height: 2.8rem;
+    margin: .5rem 1rem .5rem 0;
+    border-radius: 100rem;
+}
+
+.viewHistoryContainer {
+    display: flex;
+}
+
+.viewHistory {
+    font-size: 4rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    margin-right: 1rem;
+    border-radius: 0.3rem;
+    transition: all .2s ease-in;
+    color: var(--green-color);
+}
+
+.viewHistory:hover {
+    background-color: #EEE;
+}
+
+.provider {
+    width: 6rem;
+    padding: .5rem;
+    display: flex;
+}
+

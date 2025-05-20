@@ -1,0 +1,45 @@
+version: "3.9"
+
+services:
+  backend:
+    image: syshero/quizapp-backend:1.0.0
+    container_name: quizapp-backend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=mysql://root:root@db:3306/quizzdb
+    depends_on:
+      - db
+    networks:
+      - quizzapp-network
+
+  db:
+    image: mysql:8.3.0
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: quizzdb
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - quizzapp-network
+
+  frontend:
+    image: syshero/quizapp-web:1.0.0
+    container_name: quizapp-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - quizzapp-network
+
+volumes:
+  mysql-data:
+
+networks:
+  quizzapp-network:
+    driver: bridge

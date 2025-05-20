@@ -1,0 +1,291 @@
+[
+  {
+    "title": "Linux",
+    "description": "Bài trắc nghiệm nhằm kiểm tra kiến thức cơ bản về hệ điều hành Linux",
+    "tags": ["Virtualization", "LPIC-1"],
+    "thumbnail": "https://res.cloudinary.com/tinhaws/image/upload/v1747493367/blog-list/linux.jpg",
+    "questions": [
+      {
+        "question": "Lệnh nào dùng để liệt kê các tệp và thư mục trong Linux?",
+        "options": ["ls", "cd", "pwd", "rm"],
+        "answerIndex": 0
+      },
+      {
+        "question": "Lệnh `pwd` có chức năng gì?",
+        "options": [
+          "Xoá thư mục",
+          "Hiển thị đường dẫn hiện tại",
+          "Đổi thư mục",
+          "Hiển thị dung lượng đĩa"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "question": "Lệnh nào dùng để thay đổi quyền truy cập tệp trong Linux?",
+        "options": ["chmod", "chown", "passwd", "ls"],
+        "answerIndex": 0
+      },
+      {
+        "question": "Tệp cấu hình của người dùng thường nằm trong thư mục nào?",
+        "options": ["/etc", "/home", "/usr", "/bin"],
+        "answerIndex": 1
+      },
+      {
+        "question": "Lệnh `rm -rf /` trong Linux có tác dụng gì?",
+        "options": [
+          "Khởi động lại máy",
+          "Xoá mọi thứ trên hệ thống",
+          "Sao lưu hệ thống",
+          "Không có tác dụng gì"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "question": "Lệnh nào được dùng để hiển thị nội dung của một tệp?",
+        "options": ["cat", "touch", "mkdir", "grep"],
+        "answerIndex": 0
+      },
+      {
+        "question": "Lệnh `man` dùng để làm gì?",
+        "options": [
+          "Chạy chương trình",
+          "Hiển thị tài liệu hướng dẫn",
+          "Quản lý người dùng",
+          "Cập nhật hệ thống"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "question": "Trong Linux, người dùng `root` có quyền gì?",
+        "options": [
+          "Giới hạn",
+          "Tương tự người dùng bình thường",
+          "Toàn quyền",
+          "Không có quyền gì đặc biệt"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "question": "Đâu là tên của một trình quản lý gói phổ biến trên Ubuntu?",
+        "options": ["yum", "pacman", "apt", "rpm"],
+        "answerIndex": 2
+      },
+      {
+        "question": "Lệnh `grep` dùng để làm gì?",
+        "options": [
+          "Sao chép tệp",
+          "Tìm kiếm chuỗi văn bản",
+          "Chuyển thư mục",
+          "Hiển thị tiến trình"
+        ],
+        "answerIndex": 1
+      }
+    ]
+  },
+  {
+    "title": "Docker",
+    "description": "Bài trắc nghiệm kiểm tra kiến thức về Docker cho lập trình viên và DevOps",
+    "tags": ["DevOps", "Container"],
+    "thumbnail": "https://res.cloudinary.com/tinhaws/image/upload/v1747493366/blog-list/docker.jpg",
+    "questions": [
+      {
+        "question": "Lệnh nào được dùng để xây dựng một Docker image từ Dockerfile?",
+        "options": [
+          "docker run",
+          "docker create",
+          "docker build",
+          "docker start"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "question": "Tệp nào được Docker sử dụng để định nghĩa cách tạo ra image?",
+        "options": [
+          "Dockerfile",
+          "docker-compose.yml",
+          "build.yaml",
+          "image.json"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "question": "Docker sử dụng công nghệ nào để cô lập container?",
+        "options": [
+          "Virtual Machines",
+          "Hyper-V",
+          "Namespaces và Cgroups",
+          "Kernel Modules"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "question": "Lệnh nào dùng để gán tên (tag) cho một image đã tạo?",
+        "options": [
+          "docker tag",
+          "docker name",
+          "docker label",
+          "docker assign"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "question": "Lệnh `docker volume` dùng để làm gì?",
+        "options": [
+          "Tạo mạng giữa các container",
+          "Tạo ổ đĩa lưu trữ ngoài",
+          "Gắn kết cổng mạng",
+          "Theo dõi log container"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "question": "Điều gì xảy ra nếu bạn xóa một container nhưng không xóa volume được gắn kèm?",
+        "options": [
+          "Volume bị xóa cùng container",
+          "Volume vẫn còn trên hệ thống",
+          "Docker xóa tự động sau 24h",
+          "Volume sẽ bị lỗi"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "question": "Lệnh `docker exec` có chức năng gì?",
+        "options": [
+          "Tạo container mới",
+          "Chạy lệnh bên trong container đang chạy",
+          "Khởi động container",
+          "Tạo image từ container"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "question": "Tệp `docker-compose.yml` được dùng để làm gì?",
+        "options": [
+          "Tự động deploy image lên Docker Hub",
+          "Định nghĩa và quản lý nhiều container cùng lúc",
+          "Ghi log container",
+          "Chạy các command shell bên trong container"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "question": "Lệnh `docker network create` dùng để?",
+        "options": [
+          "Tạo một ổ đĩa ảo",
+          "Tạo một vùng bộ nhớ cache",
+          "Tạo mạng tùy chỉnh cho container",
+          "Tạo file cấu hình mạng"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "question": "Để cập nhật một container đang chạy, bạn cần thực hiện thao tác nào sau đây?",
+        "options": [
+          "Chạy lại container với image mới",
+          "Dùng lệnh docker update live",
+          "Chỉnh sửa trực tiếp container",
+          "Sửa image và chạy lệnh docker edit"
+        ],
+        "answerIndex": 0
+      }
+    ]
+  },
+   {
+    "title": "Kubernetes",
+    "description": "Bài trắc nghiệm kiểm tra hiểu biết chuyên sâu về Kubernetes và quản lý container",
+    "tags": ["Cloud Native"],
+    "thumbnail": "https://res.cloudinary.com/tinhaws/image/upload/v1747492842/blog-list/kubernetes.jpg",
+    "questions": [
+      {
+        "question": "Controller nào trong Kubernetes chịu trách nhiệm duy trì số lượng bản sao của pod?",
+        "options": ["Deployment", "ReplicaSet", "StatefulSet", "DaemonSet"],
+        "answerIndex": 1
+      },
+      {
+        "question": "Lệnh nào dùng để kiểm tra trạng thái của các resource trong cụm Kubernetes?",
+        "options": [
+          "kubectl get",
+          "kubectl status",
+          "kubectl inspect",
+          "kubectl view"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "question": "Tài nguyên nào dùng để xác định chính sách truy cập vào pod qua HTTP(S)?",
+        "options": ["Service", "Ingress", "Endpoint", "NetworkPolicy"],
+        "answerIndex": 1
+      },
+      {
+        "question": "Khi một pod bị crash liên tục, đâu là lựa chọn cấu hình phù hợp để tự động khởi động lại pod?",
+        "options": [
+          "lifecycle",
+          "restartPolicy",
+          "initContainer",
+          "readinessProbe"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "question": "Đâu là mục đích của livenessProbe trong Pod definition?",
+        "options": [
+          "Kiểm tra trạng thái mạng",
+          "Khởi tạo pod",
+          "Xác định pod còn hoạt động hay không",
+          "Giới hạn tài nguyên CPU"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "question": "Khi nào nên dùng StatefulSet thay vì Deployment?",
+        "options": [
+          "Khi pod không yêu cầu lưu trữ",
+          "Khi pod yêu cầu danh tính ổn định và lưu trữ ổn định",
+          "Khi triển khai cron job",
+          "Khi dùng volume ephemeral"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "question": "PersistentVolume (PV) và PersistentVolumeClaim (PVC) dùng để làm gì?",
+        "options": [
+          "Tạo tài nguyên CPU",
+          "Quản lý bản ghi log",
+          "Quản lý lưu trữ lâu dài",
+          "Tạo dịch vụ mạng nội bộ"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "question": "Kubernetes sử dụng công cụ nào để thực hiện network policy theo mặc định?",
+        "options": [
+          "Calico",
+          "Weave",
+          "Flannel",
+          "Không có sẵn – phụ thuộc vào CNI plugin"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "question": "Làm thế nào để triển khai một pod chỉ trên một node cụ thể?",
+        "options": [
+          "Dùng labelSelector",
+          "Dùng taints và tolerations",
+          "Dùng resource limits",
+          "Dùng NetworkPolicy"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "question": "Namespace trong Kubernetes dùng để làm gì?",
+        "options": [
+          "Quản lý log",
+          "Tạo mạng nội bộ",
+          "Cô lập tài nguyên và phân vùng theo nhóm người dùng",
+          "Tăng tốc độ scale container"
+        ],
+        "answerIndex": 2
+      }
+    ]
+  }
+]

@@ -1,0 +1,64 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum UserRole {
+  ADMIN
+  MODERATOR
+  CLIENT
+}
+
+model Quiz {
+  id          String         @id @default(uuid()) @db.Char(36)
+  title       String         @db.VarChar(255)
+  description String?        @db.Text
+  tags        String         @db.Text
+  thumbnail   String?        @db.VarChar(255)
+  questions   QuizQuestion[]
+  plays       QuizPlay[]
+}
+
+model QuizPlay {
+  id                      String   @id @default(uuid()) @db.Char(36)
+  userId                  String   @db.Char(36)
+  quizId                  String   @db.Char(36)
+  playedAt                DateTime @default(now())
+  correctQuestionsNumber  Int
+  user                    User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  quiz                    Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model QuizQuestion {
+  id          String @id @default(uuid()) @db.Char(36)
+  question    String @db.Text
+  options     String @db.Text
+  answerIndex Int
+  quizId      String @db.Char(36)
+  quiz        Quiz   @relation(fields: [quizId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model User {
+  id        String         @id @default(uuid()) @db.Char(36)
+  email     String         @unique @db.VarChar(255)
+  name      String         @db.VarChar(100)
+  password  String         @db.VarChar(255)
+  picture   String         @default("") @db.VarChar(255)
+  role      UserRole       @default(CLIENT)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  plays     QuizPlay[]
+  tokens    RefreshToken[]
+}
+
+model RefreshToken {
+  token     String   @id @db.VarChar(512)
+  userId    String   @db.Char(36)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}

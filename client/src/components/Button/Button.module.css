@@ -1,0 +1,30 @@
+.button {
+    border: none;
+    padding: 1.5rem 5rem;
+    border-radius: 0.5rem;
+    font-size: 1.5rem;
+    background-color: var(--yellow-color);
+    color: white;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: transform .25s ease;
+}
+
+.button:hover {
+    transform: scale(1.05);
+}
+
+.delete {
+    font-size: 3.5rem;
+    padding: 0.3rem;
+    cursor: pointer;
+    margin-right: 1rem;
+    border-radius: 0.3rem;
+    transition: all .2s ease-in;
+    color: var(--red-color);
+}
+
+.delete:hover {
+    background-color: #EEE;
+}

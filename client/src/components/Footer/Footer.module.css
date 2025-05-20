@@ -1,0 +1,29 @@
+.footer {
+    position: relative;
+    color: #FAFAFA;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 15rem;
+    width: 100%;
+    max-width: var(--max-width);
+    margin: 6rem auto 0;
+    padding: 0 4rem;
+}
+
+.footer::before {
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 50%;
+    height: 100%;
+    width: 100vw;
+    transform: translateX(-50%);
+    background-color: var(--primary-color);
+    overflow: hidden;
+    z-index: -1;
+}
+
+.footer p {
+    font-size: 1.5rem;
+}

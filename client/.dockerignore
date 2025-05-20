@@ -1,0 +1,34 @@
+# Node.js dependencies
+node_modules
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+pnpm-debug.log
+
+# Build output
+build
+dist
+
+# Logs
+*.log
+*.gz
+
+# Editor directories and files
+.idea
+.vscode
+*.swp
+*.swo
+*.swn
+*.swp
+*.sublime-project
+*.sublime-workspace
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Miscellaneous
+coverage
+*.bak
+*.tmp
+.cache

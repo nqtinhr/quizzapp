@@ -1,0 +1,30 @@
+@import 'react-responsive-modal/styles.css';
+
+.modal {
+    padding: 3rem 4rem 4rem !important;
+    font-size: 1.6rem;
+    font-family: var(--font-family);
+    border-radius: 0.2rem;
+    width: 60rem;
+}
+
+.modal h1 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+}
+
+.model .react-table-lite-row {
+    background-color: #FAFAFA;
+}
+
+.modal .react-responsive-modal-closeButton {
+    top: 2.5rem;
+    right: 4rem;
+    padding: 0.4rem;
+    border-radius: 0.3rem;
+    transition: all .2s ease-in;
+}
+
+.modal .react-responsive-modal-closeButton:hover {
+    background-color: #EEE;
+}
